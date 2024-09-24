@@ -1,6 +1,13 @@
+import { RouterProvider } from 'react-router-dom'
+
+import { router } from '@/router'
+import { TanstackQueryProvider } from '@/components/provider'
 import '@/globals.css'
-import { cn } from '@/utils'
 
 export default function App() {
-  return <p className={cn('text-red-500 font-bold text-5xl')}>Hello world</p>
+  return (
+    <TanstackQueryProvider>
+      <RouterProvider router={router} />
+    </TanstackQueryProvider>
+  )
 }

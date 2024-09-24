@@ -6,6 +6,13 @@ const config = {
   darkMode: ['class'],
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    container: {
+      center: true,
+      padding: '1rem',
+      screens: {
+        '2xl': '1400px',
+      },
+    },
     extend: {
       borderRadius: {
         lg: 'var(--radius)',
@@ -56,6 +63,9 @@ const config = {
           4: 'hsl(var(--chart-4))',
           5: 'hsl(var(--chart-5))',
         },
+      },
+      spacing: {
+        'header-height': 'var(--header-height)',
       },
     },
   },
