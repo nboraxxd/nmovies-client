@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 
 export default function Header() {
   return (
-    <header className="flex h-header-height items-center justify-between bg-foreground">
+    <header className="flex h-header-height items-center justify-between">
       <div className="container flex items-center text-primary-foreground sm:px-6 lg:px-8">
         <div className="flex items-center gap-2">
           <img src="/logo.svg" alt="nmovies logo" className="size-8" />
