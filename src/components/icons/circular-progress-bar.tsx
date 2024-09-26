@@ -3,44 +3,40 @@ interface Props {
   size?: number
   strokeWidth?: number
   className?: string
+  strokeColor?: 'red' | 'orange' | 'green'
 }
 
-export default function CircularProgressBar({ percent, className, size = 3, strokeWidth = 0.25 }: Props) {
+export default function CircularProgressBar(props: Props) {
+  const { percent, className, size = 40, strokeWidth = 4, strokeColor = 'green' } = props
+
   const radius = size / 2 - strokeWidth
   const pirameter = 2 * Math.PI * radius
 
   return (
-    <svg width={`${size}vw`} height={`${size}vw`} className={className}>
-      <circle
-        r={`${radius}vw`}
-        cx={`${size / 2}vw`}
-        cy={`${size / 2}vw`}
-        stroke="white"
-        strokeWidth={`${strokeWidth}vw`}
-      />
-      <circle
-        r={`${radius}vw`}
-        cx={`${size / 2}vw`}
-        cy={`${size / 2}vw`}
-        stroke="green"
-        fill="none"
-        strokeWidth={`${strokeWidth}vw`}
-        strokeDasharray={`${pirameter}vw`}
-        strokeDashoffset={`${pirameter - (pirameter * percent) / 100}vw`}
-        transform="rotate(-90)"
-        className="origin-center"
-        strokeLinecap="round"
-      />
-      <text
-        x={`${size / 2}vw`}
-        y={`${size / 2}vw`}
-        fill="white"
-        fontSize="16"
-        alignmentBaseline="middle"
-        textAnchor="middle"
-      >
-        {percent}
-      </text>
-    </svg>
+    <div className={className}>
+      <svg width={`${size}px`} height={`${size}px`}>
+        <circle
+          r={`${radius}px`}
+          cx={`${size / 2}px`}
+          cy={`${size / 2}px`}
+          stroke="white"
+          strokeWidth={`${strokeWidth}px`}
+        />
+        <circle
+          r={`${radius}px`}
+          cx={`${size / 2}px`}
+          cy={`${size / 2}px`}
+          stroke={strokeColor}
+          fill="none"
+          strokeWidth={`${strokeWidth}px`}
+          strokeDasharray={`${pirameter}px`}
+          strokeDashoffset={`${pirameter - (pirameter * percent) / 100}px`}
+          transform="rotate(-90)"
+          className="origin-center"
+          strokeLinecap="round"
+        />
+      </svg>
+      <span className="absolute inset-0 flex items-center justify-center text-xs">{percent}</span>
+    </div>
   )
 }

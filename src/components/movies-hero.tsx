@@ -4,8 +4,9 @@ import { useMediaQuery } from 'usehooks-ts'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Pagination } from 'swiper/modules'
 
-import { useGetDiscoverQuery } from '@/lib/tanstack-query/use-discover'
 import { Button } from '@/components/ui/button'
+import { useGetDiscoverQuery } from '@/lib/tanstack-query/use-tmdb'
+import placeholderBackdrop from '/placeholder-backdrop.svg'
 import 'swiper/css'
 import 'swiper/css/pagination'
 
@@ -29,7 +30,7 @@ export default function MoviesHero() {
       {getDiscoverQuery.data.data.slice(0, 4).map((item) => (
         <SwiperSlide key={item.id} className="relative">
           <img
-            src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
+            src={item.backdrop_path || placeholderBackdrop}
             alt={item.title}
             className="aspect-video object-cover brightness-50 xl:h-[calc(100vh-var(--header-height))] xl:w-screen"
           />

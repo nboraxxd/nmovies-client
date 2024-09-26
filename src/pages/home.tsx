@@ -7,6 +7,7 @@ export default function Homepage() {
       <MoviesHero />
       <main className="container sm:px-6 lg:px-8">
         <MediaList />
+        {/* <MediaList /> */}
       </main>
     </>
   )
