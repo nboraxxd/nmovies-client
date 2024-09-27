@@ -38,8 +38,6 @@ export const tmdbTvResult = z.object({
   vote_count: z.number(),
 })
 
-export type tmdbResultTMDBType = z.TypeOf<typeof tmdbMovieResult>
-
 /* Discover schema */
 const discoverySortBySchema = z.enum(
   [
@@ -87,18 +85,18 @@ export const discoverQuerySchema = z
 export type DiscoverQueryType = z.TypeOf<typeof discoverQuerySchema>
 
 // total_pages và total_results dùng snake_case vì dữ liệu trả về từ TMDB có dạng snake_case
-export const discoverTMDBResponseSchema = z.object({
+export const tmdbDiscoverResponseSchema = z.object({
   page: z.number(),
-  results: z.array(tmdbMovieResult),
+  results: z.array(tmdbMovieResult.omit({ media_type: true })),
   total_pages: z.number(),
   total_results: z.number(),
 })
 
-export type DiscoverTMDBResponseType = z.TypeOf<typeof discoverTMDBResponseSchema>
+export type TMDBDiscoverResponseType = z.TypeOf<typeof tmdbDiscoverResponseSchema>
 
 export const discoverResponseSchema = z.object({
   message: z.string(),
-  data: z.array(tmdbMovieResult.omit({ media_type: true })),
+  data: tmdbDiscoverResponseSchema.shape.results,
   pagination: paginationResponseSchema,
 })
 
@@ -121,19 +119,51 @@ export const trendingQuerySchema = z.object({
 export type TrendingQueryType = z.TypeOf<typeof trendingQuerySchema>
 
 // total_pages và total_results dùng snake_case vì dữ liệu trả về từ TMDB có dạng snake_case
-export const trendingTMDBResponseSchema = z.object({
+export const tmdbTrendingResponseSchema = z.object({
   page: z.number(),
   results: z.array(z.union([tmdbMovieResult, tmdbTvResult])),
   total_pages: z.number(),
   total_results: z.number(),
 })
 
-export type TrendingTMDBResponseType = z.TypeOf<typeof trendingTMDBResponseSchema>
+export type TMDBTrendingResponseType = z.TypeOf<typeof tmdbTrendingResponseSchema>
 
 export const trendingResponseSchema = z.object({
   message: z.string(),
-  data: trendingTMDBResponseSchema.shape.results,
+  data: tmdbTrendingResponseSchema.shape.results,
   pagination: paginationResponseSchema,
 })
 
 export type TrendingResponseType = z.TypeOf<typeof trendingResponseSchema>
+
+/** Top Rated schema */
+export const topRatedParamsSchema = z
+  .object({
+    topRatedType: z.enum(['movie', 'tv'], { message: 'Media type must be movie or tv' }).default('movie'),
+  })
+  .strict({ message: 'Additional properties not allowed' })
+
+export type TopRatedParamsType = z.TypeOf<typeof topRatedParamsSchema>
+
+export const topRatedQuerySchema = z.object({
+  page: queryPageSchema,
+})
+
+export type TopRatedQueryType = z.TypeOf<typeof topRatedQuerySchema>
+
+export const tmdbTopRatedResponseSchema = z.object({
+  page: z.number(),
+  results: z.array(tmdbMovieResult.omit({ media_type: true }).merge(tmdbTvResult.omit({ media_type: true }))),
+  total_pages: z.number(),
+  total_results: z.number(),
+})
+
+export type TMDBTopRatedResponseType = z.TypeOf<typeof tmdbTopRatedResponseSchema>
+
+export const topRatedResponseSchema = z.object({
+  message: z.string(),
+  data: z.array(z.union([tmdbMovieResult, tmdbTvResult])),
+  pagination: paginationResponseSchema,
+})
+
+export type TopRatedResponseType = z.TypeOf<typeof topRatedResponseSchema>

@@ -1,4 +1,5 @@
-import { CircularProgressBar } from '@/components/icons'
+import { CircularProgressBar, MovieSkeletonIcon } from '@/components/icons'
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
@@ -30,7 +31,7 @@ function MovieCard({ mediaType, posterPath, releaseDate, title, voteAverage }: P
         />
       </CardHeader>
       <CardContent className="flex grow flex-col pt-6">
-        <CardTitle className="line-clamp-2 leading-normal">{title}</CardTitle>
+        <CardTitle className="mb-2 line-clamp-2 leading-normal">{title}</CardTitle>
         <CardDescription className="mt-auto text-white">{releaseDate}</CardDescription>
       </CardContent>
     </Card>
@@ -39,18 +40,16 @@ function MovieCard({ mediaType, posterPath, releaseDate, title, voteAverage }: P
 
 function MovieCardSkeleton() {
   return (
-    <div className="flex flex-col">
+    <Card className="flex flex-col">
       <div className="relative p-0 pt-[150%]">
         <Skeleton className="absolute left-0 top-0 size-full rounded-t-xl" />
+        <MovieSkeletonIcon className="absolute left-1/2 top-1/2 size-24 -translate-x-1/2 -translate-y-1/2" />
       </div>
-      <div className="relative flex grow flex-col">
-        <Skeleton className="w-3/4" />
-
-        <div className="mt-auto text-white">
-          <Skeleton className="w-1/2" />
-        </div>
+      <div className="p-6">
+        <Skeleton className="h-6 w-full" />
+        <Skeleton className="mt-2 h-5 w-3/4" />
       </div>
-    </div>
+    </Card>
   )
 }
 

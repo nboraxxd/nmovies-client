@@ -1,7 +1,13 @@
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 
 import tmdbApi from '@/apis/tmdb.api'
-import { DiscoverParamsType, DiscoverQueryType, TrendingParamsType, TrendingQueryType } from '@/lib/schemas/tmdb.schema'
+import {
+  DiscoverParamsType,
+  DiscoverQueryType,
+  TopRatedParamsType,
+  TrendingParamsType,
+  TrendingQueryType,
+} from '@/lib/schemas/tmdb.schema'
 
 export function useGetDiscoverQuery(params: DiscoverParamsType, query: DiscoverQueryType) {
   return useQuery({
@@ -10,10 +16,18 @@ export function useGetDiscoverQuery(params: DiscoverParamsType, query: DiscoverQ
   })
 }
 
-export function useGetTrendingQuery(params: TrendingParamsType, query: TrendingQueryType) {
+export function useGetTrendingQuery(params: TrendingParamsType, query?: TrendingQueryType) {
   return useQuery({
     queryFn: () => tmdbApi.trending(params, query),
     queryKey: ['trending', params, query],
+    placeholderData: keepPreviousData,
+  })
+}
+
+export function useGetTopRatedQuery(params: TopRatedParamsType, query?: TrendingQueryType) {
+  return useQuery({
+    queryFn: () => tmdbApi.topRated(params, query),
+    queryKey: ['topRated', params, query],
     placeholderData: keepPreviousData,
   })
 }

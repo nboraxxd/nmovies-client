@@ -7,10 +7,10 @@ export default function Header() {
   return (
     <header className="flex h-header-height items-center justify-between">
       <div className="container flex items-center text-primary-foreground sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <img src="/logo.svg" alt="nmovies logo" className="size-8" />
-          <span>nmovies</span>
-        </div>
+          <h1>nmovies</h1>
+        </Link>
         <nav className="ml-10">
           <ul className="flex items-center gap-4 lg:gap-6">
             <li className="flex items-center">
