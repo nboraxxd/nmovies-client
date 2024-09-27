@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { TOP_RATED_TABS } from '@/constants/list'
+import { TOP_RATED_TABS } from '@/constants'
 import { TopRatedParamsType } from '@/lib/schemas/tmdb.schema'
 import { useGetTopRatedQuery } from '@/lib/tanstack-query/use-tmdb'
 import MediaTabs from '@/components/media-tabs'

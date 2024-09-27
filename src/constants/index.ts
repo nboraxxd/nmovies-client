@@ -23,3 +23,17 @@ export const TOP_RATED_TABS = [
     name: 'TV Show',
   },
 ] as const
+
+export const FOOTER_LINKS = [
+  'home',
+  'live',
+  'you must watch',
+  'contact us',
+  'FAQ',
+  'Recent release',
+  'term of services',
+  'premium',
+  'Top IMDB',
+  'About us',
+  'Privacy policy',
+] as const

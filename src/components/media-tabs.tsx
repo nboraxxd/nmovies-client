@@ -20,9 +20,9 @@ export default function MediaTabs<T extends string>(props: Props<T>) {
 
   return (
     <Tabs defaultValue={tabs[0].value} onValueChange={(value) => setValue(value as T)} className="mt-10">
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col items-start gap-1 sm:flex-row sm:items-center sm:gap-4">
         <h2 className="text-xl font-semibold">{heading}</h2>
-        <TabsList>
+        <TabsList className="self-end sm:self-start">
           {tabs.map(({ name, value }) => (
             <TabsTrigger key={value} value={value}>
               {name}
