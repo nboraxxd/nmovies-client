@@ -9,7 +9,7 @@ export const TRENDING_TABS = [
   },
   {
     value: 'tv',
-    name: 'TV Show',
+    name: 'TV Series',
   },
 ] as const
 
@@ -20,7 +20,7 @@ export const TOP_RATED_TABS = [
   },
   {
     value: 'tv',
-    name: 'TV Show',
+    name: 'TV Series',
   },
 ] as const
 

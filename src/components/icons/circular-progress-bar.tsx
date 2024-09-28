@@ -1,3 +1,5 @@
+import { cn } from '@/utils'
+
 interface Props {
   percent: number
   size?: number
@@ -13,7 +15,7 @@ export default function CircularProgressBar(props: Props) {
   const pirameter = 2 * Math.PI * radius
 
   return (
-    <div className={className}>
+    <div className={cn('relative', className)}>
       <svg width={`${size}px`} height={`${size}px`}>
         <circle
           r={`${radius}px`}

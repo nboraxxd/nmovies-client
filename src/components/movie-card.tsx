@@ -1,6 +1,7 @@
 import { CircularProgressBar, MovieSkeletonIcon } from '@/components/icons'
+import { AspectRatio } from '@/components/ui/aspect-ratio'
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
 interface Props {
@@ -17,11 +18,11 @@ function MovieCard({ mediaType, posterPath, releaseDate, title, voteAverage }: P
 
   return (
     <Card className="flex flex-col">
-      <CardHeader className="relative p-0 pt-[150%]">
-        <img src={posterPath} alt={title} className="absolute left-0 top-0 size-full rounded-t-xl object-cover" />
+      <AspectRatio ratio={2 / 3}>
+        <img src={posterPath} alt={title} className="h-full rounded-t-xl object-cover" />
         {mediaType === 'tv' ? (
           <div className="absolute right-1 top-1 rounded bg-background p-1 text-sm text-foreground shadow-md">
-            TV Show
+            TV Series
           </div>
         ) : null}
         <CircularProgressBar
@@ -29,7 +30,7 @@ function MovieCard({ mediaType, posterPath, releaseDate, title, voteAverage }: P
           strokeColor={strokeColor}
           className="absolute bottom-0 left-2 translate-y-1/2"
         />
-      </CardHeader>
+      </AspectRatio>
       <CardContent className="flex grow flex-col pt-6">
         <CardTitle className="mb-2 line-clamp-2 leading-normal">{title}</CardTitle>
         <CardDescription className="mt-auto text-white">{releaseDate}</CardDescription>

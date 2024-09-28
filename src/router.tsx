@@ -4,6 +4,7 @@ import { PATH } from '@/constants/path'
 import MainLayout from '@/layouts/main'
 import NotFound from '@/pages/not-found'
 import Homepage from '@/pages/home'
+import MovieDetail from '@/pages/movie-detail'
 
 export const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Homepage />,
+      },
+      {
+        path: PATH.MOVIE_DETAIL,
+        element: <MovieDetail />,
       },
     ],
   },

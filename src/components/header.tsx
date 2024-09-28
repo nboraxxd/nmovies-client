@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { SearchIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
@@ -9,15 +8,10 @@ export default function Header() {
       <div className="container flex items-center text-primary-foreground sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-2">
           <img src="/logo.svg" alt="nmovies logo" className="size-8" />
-          <h1>nmovies</h1>
+          <span>nmovies</span>
         </Link>
-        <nav className="ml-10">
+        {/* <nav className="ml-10">
           <ul className="flex items-center gap-4 lg:gap-6">
-            <li className="flex items-center">
-              <Link to="/" className="inline-block p-2">
-                <SearchIcon className="size-6" />
-              </Link>
-            </li>
             <li>
               <Link to="/" className="px-2 py-1">
                 Movies
@@ -25,11 +19,11 @@ export default function Header() {
             </li>
             <li>
               <Link to="/" className="px-2 py-1">
-                TV Shows
+                TV Series
               </Link>
             </li>
           </ul>
-        </nav>
+        </nav> */}
         <Button asChild>
           <Link to="/login" className="ml-auto">
             Sign In
