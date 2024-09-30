@@ -9,6 +9,8 @@ import {
   TopRatedQueryType,
   TopRatedResponseType,
   TopRatedParamsType,
+  MovieDetailResponseType,
+  RecommendedMoviesResponseType,
 } from '@/lib/schemas/tmdb.schema'
 
 const TMDB_PREFIX = '/tmdb'
@@ -30,6 +32,14 @@ const tmdbApi = {
 
   topRated: async ({ topRatedType }: TopRatedParamsType, query?: TopRatedQueryType) => {
     return http.get<TopRatedResponseType>(`${TMDB_PREFIX}/top-rated/${topRatedType}`, { params: query })
+  },
+
+  getMovieDetail: async (movieId: number) => {
+    return http.get<MovieDetailResponseType>(`${TMDB_PREFIX}/movies/${movieId}`)
+  },
+
+  getRecommendedMovies: async (movieId: number) => {
+    return http.get<RecommendedMoviesResponseType>(`${TMDB_PREFIX}/movies/${movieId}/recommended`)
   },
 }
 

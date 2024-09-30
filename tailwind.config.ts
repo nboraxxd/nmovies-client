@@ -14,6 +14,10 @@ const config = {
       },
     },
     extend: {
+      screens: {
+        xs: '480px',
+        '2xl': '1400px',
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',

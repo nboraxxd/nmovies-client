@@ -5,16 +5,17 @@ interface Props {
   size?: number
   strokeWidth?: number
   className?: string
-  strokeColor?: 'red' | 'orange' | 'green'
 }
 
 export default function CircularProgressBar(props: Props) {
-  const { percent, className, size = 40, strokeWidth = 4, strokeColor = 'green' } = props
+  const { percent, className, size = 40, strokeWidth = 4 } = props
 
   const radius = size / 2 - strokeWidth
   const pirameter = 2 * Math.PI * radius
 
-  return (
+  const strokeColor = percent >= 70 ? 'green' : percent >= 50 ? 'orange' : 'red'
+
+  return percent > 0 ? (
     <div className={cn('relative', className)}>
       <svg width={`${size}px`} height={`${size}px`}>
         <circle
@@ -40,5 +41,5 @@ export default function CircularProgressBar(props: Props) {
       </svg>
       <span className="absolute inset-0 flex items-center justify-center text-xs">{percent}</span>
     </div>
-  )
+  ) : null
 }

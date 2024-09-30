@@ -31,3 +31,17 @@ export function useGetTopRatedQuery(params: TopRatedParamsType, query?: Trending
     placeholderData: keepPreviousData,
   })
 }
+
+export function useGetMovieDetailQuery(movieId: number) {
+  return useQuery({
+    queryFn: () => tmdbApi.getMovieDetail(movieId),
+    queryKey: ['movieDetail', movieId],
+  })
+}
+
+export function useGetRecommendedMoviesQuery(movieId: number) {
+  return useQuery({
+    queryFn: () => tmdbApi.getRecommendedMovies(movieId),
+    queryKey: ['recommendedMovies', movieId],
+  })
+}

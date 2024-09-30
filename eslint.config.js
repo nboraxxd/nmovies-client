@@ -53,6 +53,7 @@ export default tseslint.config(
     },
     settings: {
       tailwindcss: {
+        callees: ['cn', 'className'],
         classRegex: '.*[Cc]lass[Nn]ame.*',
       },
     },

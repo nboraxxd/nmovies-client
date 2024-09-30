@@ -1,75 +1,136 @@
-import { PlayIcon } from 'lucide-react'
-
-import { Button } from '@/components/ui/button'
-import { CircularProgressBar } from '@/components/icons'
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { CaretSortIcon } from '@radix-ui/react-icons'
+
+import { currencyFormatter } from '@/utils'
+import { useGetMovieDetailQuery, useGetRecommendedMoviesQuery } from '@/lib/tanstack-query/use-tmdb'
+import { Button } from '@/components/ui/button'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { Heading } from '@/components/common'
+import { CastCard, Banner } from '@/components/media-detail'
+import { MediaCard } from '@/components/media-card'
 
 export default function MovieDetail() {
+  const [isExtended, setIsExtended] = useState(false)
+
   const { movieId } = useParams<{ movieId: string }>()
+
+  const getMovieDetailQuery = useGetMovieDetailQuery(Number(movieId))
+  const movieDetail = getMovieDetailQuery.isSuccess ? getMovieDetailQuery.data.data : null
+
+  const getRecommendedMoviesQuery = useGetRecommendedMoviesQuery(Number(movieId))
+  const recommendedMovies = getRecommendedMoviesQuery.isSuccess ? getRecommendedMoviesQuery.data.data : []
 
   return (
     <main>
-      <div className="relative">
-        {/* Backdrop */}
-        <div className="relative pb-[100%] sm:pb-[72%] md:pb-[56%] lg:pb-[42%] xl:pb-[36%]">
-          <img
-            src="https://image.tmdb.org/t/p/original/zAqBIeO71BFL7bAtP5TFzVjVamy.jpg"
-            alt=""
-            className="absolute inset-0 size-full object-cover brightness-[0.2]"
-          />
+      {movieDetail ? (
+        <Banner
+          title={movieDetail.title}
+          releaseDate={movieDetail.release_date}
+          overview={movieDetail.overview}
+          voteAverage={movieDetail.vote_average}
+          crews={movieDetail.credits.crew}
+          genres={movieDetail.genres}
+          backdrop={movieDetail.backdrop_path || undefined}
+          poster={movieDetail.poster_path || undefined}
+          certification={movieDetail.certification || undefined}
+        />
+      ) : null}
+
+      <div className="container mt-10 sm:px-6 lg:px-8">
+        <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-8">
+          {movieDetail ? (
+            <section>
+              <Heading>Cast</Heading>
+              <Collapsible open={isExtended} onOpenChange={setIsExtended}>
+                <div className="mt-6 grid grid-cols-2 gap-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 md:gap-3 xl:grid-cols-6">
+                  {movieDetail.credits.cast.slice(0, 6).map((actor) => (
+                    <CastCard
+                      key={actor.id}
+                      avatarUrl={actor.profile_path ?? undefined}
+                      character={actor.character}
+                      id={actor.id}
+                      name={actor.name}
+                    />
+                  ))}
+                  <CollapsibleContent asChild>
+                    <>
+                      {movieDetail.credits.cast.slice(6, 32).map((actor) => (
+                        <CastCard
+                          key={actor.id}
+                          avatarUrl={actor.profile_path ?? undefined}
+                          character={actor.character}
+                          id={actor.id}
+                          name={actor.name}
+                        />
+                      ))}
+                    </>
+                  </CollapsibleContent>
+                </div>
+                {movieDetail.credits.cast.length > 6 ? (
+                  <div className="mt-1.5 text-center">
+                    <CollapsibleTrigger asChild>
+                      <Button variant="ghost">
+                        <CaretSortIcon className="size-4" />
+                        <span>{isExtended ? 'Show less' : 'Show more'}</span>
+                      </Button>
+                    </CollapsibleTrigger>
+                  </div>
+                ) : null}
+              </Collapsible>
+            </section>
+          ) : null}
+          {movieDetail ? (
+            <section className="sticky top-0 -mt-10 hidden h-screen overflow-y-auto py-10 lg:block">
+              <Heading>Infomation</Heading>
+              <div className="mt-6">
+                <h4 className="font-semibold">Original name</h4>
+                <h3 className="mt-0.5">{movieDetail.original_title}</h3>
+              </div>
+              <div className="mt-3">
+                <h4 className="font-semibold">Original country</h4>
+                {movieDetail.origin_country.map((countryCode) => (
+                  <img
+                    key={countryCode}
+                    src={`https://flagcdn.com/48x36/${countryCode.toLowerCase()}.png`}
+                    className="mt-0.5 h-6 object-contain"
+                  />
+                ))}
+              </div>
+              <div className="mt-3">
+                <h4 className="font-semibold">Status</h4>
+                <h3 className="mt-0.5">{movieDetail.status}</h3>
+              </div>
+              <div className="mt-3">
+                <h4 className="font-semibold">Budget</h4>
+                <h3 className="mt-0.5">{currencyFormatter(movieDetail.budget)}</h3>
+              </div>
+              <div className="mt-3">
+                <h4 className="font-semibold">Revenue</h4>
+                <h3 className="mt-0.5">{currencyFormatter(movieDetail.revenue)}</h3>
+              </div>
+            </section>
+          ) : null}
         </div>
-        {/* Infomation */}
-        <div className="absolute inset-0 mx-auto flex max-w-screen-xl items-center justify-center gap-8 p-6 md:items-stretch lg:p-8">
-          {/* Poster */}
-          <div className="hidden shrink-0 md:block">
-            <img
-              src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/cSMdFWmajaX4oUMLx7HEDI84GkP.jpg"
-              alt=""
-              className="size-full rounded-lg object-contain shadow-lg"
-            />
-          </div>
-          {/* Content */}
-          <div className="md:max-w-xl">
-            <h1 className="line-clamp-1 text-xl font-bold text-foreground md:text-2xl lg:text-3xl">
-              Lorem ipsum dolor sit amet consectetur.
-            </h1>
 
-            <div className="mt-4 flex items-center gap-4">
-              <span className="shrink-0 border border-gray-400 p-1 text-gray-400">PG-13</span>
-              <span className="shrink-0">2024-11-11</span>
-              <div className="hidden md:line-clamp-1">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta, aut.
-              </div>
+        {recommendedMovies.length > 0 ? (
+          <section className="mt-10">
+            <Heading>You may also like</Heading>
+            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4 lg:grid-cols-5 xl:grid-cols-6">
+              {recommendedMovies.map((item) => (
+                <MediaCard
+                  key={item.id}
+                  id={item.id}
+                  title={item.media_type === 'movie' ? item.title : item.name}
+                  mediaType={item.media_type}
+                  posterPath={item.poster_path ?? undefined}
+                  releaseDate={item.media_type === 'movie' ? item.release_date : item.first_air_date}
+                  voteAverage={item.vote_average}
+                />
+              ))}
             </div>
-
-            <div className="mt-6 flex items-center gap-6">
-              <CircularProgressBar percent={80} className="relative" />
-              <Button variant="secondary">
-                <PlayIcon className="mr-1 size-4" />
-                Trailer
-              </Button>
-            </div>
-
-            <div className="mt-6 space-y-1.5 md:mt-8">
-              <p className="font-semibold">Overview</p>
-              <p className="line-clamp-3">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, consequatur expedita. Libero odit
-                excepturi vel similique velit laudantium asperiores labore! Numquam perferendis sint excepturi vitae?
-              </p>
-            </div>
-
-            <div className="mt-6 hidden grid-cols-2 gap-2 text-sm sm:grid">
-              <div className="space-y-1.5">
-                <p className="font-semibold">Director</p>
-                <p className="line-clamp-1">Lorem, ipsum dolor.</p>
-              </div>
-              <div className="space-y-1.5">
-                <p className="font-semibold">Screenplay</p>
-                <p className="line-clamp-1">Lorem ipsum dolor sit amet.</p>
-              </div>
-            </div>
-          </div>
-        </div>
+          </section>
+        ) : null}
       </div>
     </main>
   )

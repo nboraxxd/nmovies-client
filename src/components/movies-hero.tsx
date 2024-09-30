@@ -4,8 +4,9 @@ import { useMediaQuery } from 'usehooks-ts'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Pagination } from 'swiper/modules'
 
-import { Button } from '@/components/ui/button'
+import { PATH } from '@/constants/path'
 import { useGetDiscoverQuery } from '@/lib/tanstack-query/use-tmdb'
+import { Button } from '@/components/ui/button'
 import placeholderBackdrop from '/placeholder-backdrop.svg'
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -47,7 +48,7 @@ export default function MoviesHero() {
                 Trailer
               </Button>
               <Button asChild variant="outline">
-                <Link to="/movie/1">View Detail</Link>
+                <Link to={`${PATH.MOVIES}/${item.id}`}>View Detail</Link>
               </Button>
             </div>
           </div>

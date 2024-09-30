@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react'
 
 import { TopRatedResponseType, TrendingResponseType } from '@/lib/schemas/tmdb.schema'
-import { MovieCard, MovieCardSkeleton } from '@/components/movie-card'
+import { MediaCard, MediaCardSkeleton } from '@/components/media-card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import placeholderPoster from '/placeholder-poster.svg'
 
@@ -35,13 +35,14 @@ export default function MediaTabs<T extends string>(props: Props<T>) {
         forceMount
         className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4 lg:grid-cols-5 xl:grid-cols-6"
       >
-        {isLoading ? Array.from(Array(12)).map((_, i) => <MovieCardSkeleton key={i} />) : null}
+        {isLoading ? Array.from(Array(12)).map((_, i) => <MediaCardSkeleton key={i} />) : null}
         {isSuccess && medias
           ? medias
               .slice(0, 12)
               .map((item) => (
-                <MovieCard
+                <MediaCard
                   key={item.id}
+                  id={item.id}
                   title={item.media_type === 'movie' ? item.title : item.name}
                   mediaType={item.media_type}
                   posterPath={item.poster_path || placeholderPoster}
