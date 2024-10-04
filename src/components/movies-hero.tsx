@@ -35,8 +35,8 @@ export default function MoviesHero() {
             alt={item.title}
             className="aspect-video object-cover brightness-50 xl:h-[calc(100vh-var(--header-height))] xl:w-screen"
           />
-          <div className="absolute top-1/2 flex max-w-[90vw] -translate-y-1/2 flex-col gap-3 pl-8 text-popover md:max-w-[420px] md:gap-5 md:pl-16">
-            <h2 className="line-clamp-1 text-4xl sm:max-w-[420px]">{item.title}</h2>
+          <div className="absolute top-1/2 flex max-w-[90vw] -translate-y-1/2 flex-col gap-3 pl-8 text-popover md:max-w-[50vw] md:gap-5 md:pl-16">
+            <h2 className="text-2xl md:text-4xl">{item.title}</h2>
             <p className="hidden md:block">{item.release_date}</p>
             <div>
               <p className="mb-2 hidden font-bold md:block">Overview</p>

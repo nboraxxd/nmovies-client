@@ -4,7 +4,8 @@ import { PATH } from '@/constants/path'
 import MainLayout from '@/layouts/main'
 import NotFound from '@/pages/not-found'
 import Homepage from '@/pages/home'
-import MovieDetail from '@/pages/movie-detail'
+import MovieDetailPage from '@/pages/movie-detail'
+import LoginPage from '@/pages/login'
 
 export const router = createBrowserRouter([
   {
@@ -17,8 +18,12 @@ export const router = createBrowserRouter([
         element: <Homepage />,
       },
       {
+        path: PATH.LOGIN,
+        element: <LoginPage />,
+      },
+      {
         path: PATH.MOVIE_DETAIL,
-        element: <MovieDetail />,
+        element: <MovieDetailPage />,
       },
     ],
   },

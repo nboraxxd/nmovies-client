@@ -8,7 +8,8 @@ import {
   setAccessTokenToLocalStorage,
   setRefreshTokenToLocalStorage,
 } from '@/utils/local-storage'
-import { LOGIN_API_URL, LOGOUT_API_URL } from '@/apis/auths.api'
+import { LOGIN_API_URL, LOGOUT_API_URL, REGISTER_API_URL } from '@/apis/auths.api'
+import { AuthResponseType } from '@/lib/schemas/auth.schema'
 
 class Http {
   instance: AxiosInstance
@@ -40,9 +41,9 @@ class Http {
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config
-        if (url === LOGIN_API_URL) {
-          this.accessToken = response.data.accessToken
-          this.refreshToken = response.data.refreshToken
+        if (url === LOGIN_API_URL || url === REGISTER_API_URL) {
+          this.accessToken = (response.data as AuthResponseType).data.accessToken
+          this.refreshToken = (response.data as AuthResponseType).data.refreshToken
 
           setAccessTokenToLocalStorage(this.accessToken)
           setRefreshTokenToLocalStorage(this.refreshToken)

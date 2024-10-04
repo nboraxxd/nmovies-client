@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 
-import { currencyFormatter } from '@/utils'
+import { cn, currencyFormatter } from '@/utils'
 import { useGetMovieDetailQuery, useGetRecommendedMoviesQuery } from '@/lib/tanstack-query/use-tmdb'
 import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
@@ -10,7 +10,7 @@ import { Heading } from '@/components/common'
 import { CastCard, Banner } from '@/components/media-detail'
 import { MediaCard } from '@/components/media-card'
 
-export default function MovieDetail() {
+export default function MovieDetailPage() {
   const [isExtended, setIsExtended] = useState(false)
 
   const { movieId } = useParams<{ movieId: string }>()
@@ -81,7 +81,7 @@ export default function MovieDetail() {
             </section>
           ) : null}
           {movieDetail ? (
-            <section className="sticky top-0 -mt-10 hidden h-screen overflow-y-auto py-10 lg:block">
+            <section className={cn('hidden lg:block', { 'sticky top-0 -mt-10 h-fit pt-10 pb-9 ': isExtended })}>
               <Heading>Infomation</Heading>
               <div className="mt-6">
                 <h4 className="font-semibold">Original name</h4>

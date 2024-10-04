@@ -4,4 +4,5 @@ export const PATH = {
   HOMEPAGE: '/',
   MOVIES: MOVIES,
   MOVIE_DETAIL: `/${MOVIES}/:movieId`,
+  LOGIN: '/login',
 }
