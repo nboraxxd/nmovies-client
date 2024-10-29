@@ -1,25 +1,26 @@
 import z from 'zod'
+import { paginationResponseSchema } from '@/lib/schemas/common.schema'
 
-const favoriteCollectionSchema = z.object({
+const favoriteDocumentSchema = z.object({
   _id: z.string(),
-  user_id: z.string(),
-  media_id: z.number(),
-  title: z.string(),
-  type: z.enum(['movie', 'tv']),
-  poster_path: z.string().nullable(),
-  release_date: z.string(),
-  created_at: z.date(),
+  userId: z.string(),
+  mediaId: z.number(),
+  mediaTitle: z.string(),
+  mediaType: z.enum(['movie', 'tv']),
+  mediaPoster: z.string().nullable(),
+  mediaReleaseDate: z.string(),
+  createdAt: z.date(),
 })
 
-export type FavoriteCollectionType = z.TypeOf<typeof favoriteCollectionSchema>
+export type FavoriteDocumentType = z.TypeOf<typeof favoriteDocumentSchema>
 
 export const addFavoriteBodySchema = z
   .object({
     mediaId: z.number(),
-    title: z.string(),
-    type: z.enum(['movie', 'tv']),
-    posterPath: z.string().nullable(),
-    releaseDate: z.string(),
+    mediaTitle: z.string(),
+    mediaType: z.enum(['movie', 'tv']),
+    mediaPoster: z.string().nullable(),
+    mediaReleaseDate: z.string(),
   })
   .strict({ message: 'Additional properties not allowed' })
 
@@ -27,7 +28,30 @@ export type AddFavoriteBodyType = z.TypeOf<typeof addFavoriteBodySchema>
 
 export const addFavoriteResponseSchema = z.object({
   message: z.string(),
-  data: z.nullable(favoriteCollectionSchema),
+  data: z.nullable(favoriteDocumentSchema),
 })
 
 export type AddFavoriteResponseType = z.TypeOf<typeof addFavoriteResponseSchema>
+
+export const getMyFavoritesResponseSchema = z.object({
+  message: z.string(),
+  data: z.array(favoriteDocumentSchema.omit({ userId: true })),
+  pagination: paginationResponseSchema,
+})
+
+export type GetMyFavoritesResponseType = z.TypeOf<typeof getMyFavoritesResponseSchema>
+
+export const deleteFavoriteByIdParamsSchema = z.object({
+  favoriteId: z.string(),
+})
+
+export type DeleteFavoriteByIdParamsType = z.TypeOf<typeof deleteFavoriteByIdParamsSchema>
+
+export const deleteFavoriteByMediaParamsSchema = z
+  .object({
+    mediaId: z.coerce.number(),
+    mediaType: z.enum(['movie', 'tv']),
+  })
+  .strict({ message: 'Additional properties not allowed' })
+
+export type DeleteFavoriteByMediaParamsType = z.TypeOf<typeof deleteFavoriteByMediaParamsSchema>

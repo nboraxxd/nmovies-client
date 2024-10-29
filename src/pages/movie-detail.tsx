@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 
 import { cn, currencyFormatter } from '@/utils'
-import { useGetMovieDetailQuery, useGetRecommendedMoviesQuery } from '@/lib/tanstack-query/use-tmdb'
+import { useGetMovieDetailQuery, useGetRecommendedMoviesQuery } from '@/lib/tanstack-query/use-movies'
 import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Heading } from '@/components/common'
@@ -18,7 +18,14 @@ export default function MovieDetailPage() {
   const getMovieDetailQuery = useGetMovieDetailQuery(Number(movieId))
   const movieDetail = getMovieDetailQuery.isSuccess ? getMovieDetailQuery.data.data : null
 
-  const getRecommendedMoviesQuery = useGetRecommendedMoviesQuery(Number(movieId))
+  const directors = movieDetail?.credits.crew.filter((crew) => crew.job === 'Director').map((director) => director.name)
+  const writers = movieDetail?.credits.crew.filter((crew) => crew.department === 'Writer').map((writer) => writer.name)
+  const screenplays = movieDetail?.credits.crew
+    .filter((crew) => crew.job === 'Screenplay')
+    .map((screenplay) => screenplay.name)
+  console.log('🔥 ~ MovieDetailPage ~ directors:', movieDetail)
+
+  const getRecommendedMoviesQuery = useGetRecommendedMoviesQuery({ movieId: Number(movieId) })
   const recommendedMovies = getRecommendedMoviesQuery.isSuccess ? getRecommendedMoviesQuery.data.data : []
 
   return (
@@ -26,13 +33,15 @@ export default function MovieDetailPage() {
       {movieDetail ? (
         <Banner
           title={movieDetail.title}
-          releaseDate={movieDetail.release_date}
+          releaseDate={movieDetail.releaseDate}
           overview={movieDetail.overview}
-          voteAverage={movieDetail.vote_average}
-          crews={movieDetail.credits.crew}
+          voteAverage={movieDetail.voteAverage}
+          directors={directors ?? []}
+          screenplays={screenplays ?? []}
+          writers={writers ?? []}
           genres={movieDetail.genres}
-          backdrop={movieDetail.backdrop_path || undefined}
-          poster={movieDetail.poster_path || undefined}
+          backdrop={movieDetail.backdropPath || undefined}
+          poster={movieDetail.posterPath || undefined}
           certification={movieDetail.certification || undefined}
         />
       ) : null}
@@ -47,7 +56,7 @@ export default function MovieDetailPage() {
                   {movieDetail.credits.cast.slice(0, 6).map((actor) => (
                     <CastCard
                       key={actor.id}
-                      avatarUrl={actor.profile_path ?? undefined}
+                      avatarUrl={actor.profilePath ?? undefined}
                       character={actor.character}
                       id={actor.id}
                       name={actor.name}
@@ -58,7 +67,7 @@ export default function MovieDetailPage() {
                       {movieDetail.credits.cast.slice(6, 32).map((actor) => (
                         <CastCard
                           key={actor.id}
-                          avatarUrl={actor.profile_path ?? undefined}
+                          avatarUrl={actor.profilePath ?? undefined}
                           character={actor.character}
                           id={actor.id}
                           name={actor.name}
@@ -85,11 +94,11 @@ export default function MovieDetailPage() {
               <Heading>Infomation</Heading>
               <div className="mt-6">
                 <h4 className="font-semibold">Original name</h4>
-                <h3 className="mt-0.5">{movieDetail.original_title}</h3>
+                <h3 className="mt-0.5">{movieDetail.originalTitle}</h3>
               </div>
               <div className="mt-3">
                 <h4 className="font-semibold">Original country</h4>
-                {movieDetail.origin_country.map((countryCode) => (
+                {movieDetail.originCountry.map((countryCode) => (
                   <img
                     key={countryCode}
                     src={`https://flagcdn.com/48x36/${countryCode.toLowerCase()}.png`}
@@ -121,11 +130,11 @@ export default function MovieDetailPage() {
                 <MediaCard
                   key={item.id}
                   id={item.id}
-                  title={item.media_type === 'movie' ? item.title : item.name}
-                  mediaType={item.media_type}
-                  posterPath={item.poster_path ?? undefined}
-                  releaseDate={item.media_type === 'movie' ? item.release_date : item.first_air_date}
-                  voteAverage={item.vote_average}
+                  title={item.mediaType === 'movie' ? item.title : item.name}
+                  mediaType={item.mediaType}
+                  posterPath={item.posterPath ?? undefined}
+                  releaseDate={item.mediaType === 'movie' ? item.releaseDate : item.firstAirDate}
+                  voteAverage={item.voteAverage}
                 />
               ))}
             </div>

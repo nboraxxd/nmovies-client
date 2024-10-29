@@ -1,31 +1,39 @@
 import { PlayIcon } from 'lucide-react'
 
-import { TMDBCrewType, TMDBGenreType } from '@/lib/schemas/tmdb.schema'
 import { Button } from '@/components/ui/button'
 import { CircularProgressBar } from '@/components/icons'
 import placeholderBackdrop from '/placeholder-backdrop.svg'
 import placeholderPoster from '/placeholder-poster.svg'
+import { GenreType } from '@/lib/schemas/common-media.schema'
 
 interface Props {
   title: string
   releaseDate: string
   overview: string
   voteAverage: number
-  crews: TMDBCrewType[]
-  genres: TMDBGenreType[]
+  directors: string[]
+  screenplays: string[]
+  writers: string[]
+  genres: GenreType[]
   backdrop?: string
   poster?: string
   certification?: string
 }
 
 export default function Banner(props: Props) {
-  const { crews, genres, overview, releaseDate, title, voteAverage, backdrop, certification, poster } = props
-
-  const directors = crews.filter((crew) => crew.job === 'Director').map((item) => item.name)
-
-  const screenplays = crews.filter((crew) => crew.job === 'Screenplay').map((item) => item.name)
-
-  const writers = crews.filter((crew) => crew.job === 'Writer').map((item) => item.name)
+  const {
+    screenplays,
+    directors,
+    writers,
+    genres,
+    overview,
+    releaseDate,
+    title,
+    voteAverage,
+    backdrop,
+    certification,
+    poster,
+  } = props
 
   return (
     <div className="relative">

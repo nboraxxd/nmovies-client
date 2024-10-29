@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { emailSchema, passwordSchema } from '@/lib/schemas/common.schema'
+import { emailSchema, nameSchema, passwordSchema } from '@/lib/schemas/common.schema'
 
 export const authResponseSchema = z.object({
   message: z.string(),
@@ -28,7 +28,7 @@ export type EmailVerifyTokenType = z.TypeOf<typeof emailVerifyTokenSchema>
 
 export const registerBodySchema = z
   .object({
-    name: z.string({ required_error: 'Name is required' }).trim(),
+    name: nameSchema,
     email: emailSchema,
     password: passwordSchema,
     confirmPassword: z
@@ -59,3 +59,53 @@ export const refreshTokenSchema = z
   .strict({ message: 'Additional properties not allowed' })
 
 export type RefreshTokenType = z.TypeOf<typeof refreshTokenSchema>
+
+export const changePasswordBodySchema = z
+  .object({
+    currentPassword: passwordSchema,
+    newPassword: passwordSchema,
+    confirmNewPassword: z
+      .string({ required_error: 'confirmNewPassword is required' })
+      .min(6, { message: 'confirmNewPassword must be at least 6 characters' }),
+  })
+  .strict({ message: 'Additional properties not allowed' })
+  .superRefine(({ newPassword, confirmNewPassword }, ctx) => {
+    if (newPassword !== confirmNewPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Passwords do not match',
+        path: ['confirmNewPassword'],
+      })
+    }
+  })
+
+export type ChangePasswordBodyType = z.TypeOf<typeof changePasswordBodySchema>
+
+export const forgotPasswordBodySchema = z
+  .object({
+    email: emailSchema,
+  })
+  .strict({ message: 'Additional properties not allowed' })
+
+export type ForgotPasswordBodyType = z.TypeOf<typeof forgotPasswordBodySchema>
+
+export const resetPasswordBodySchema = z
+  .object({
+    resetPasswordToken: z.string({ required_error: 'Reset password token is required' }),
+    password: passwordSchema,
+    confirmPassword: z
+      .string({ required_error: 'confirmPassword is required' })
+      .min(6, { message: 'confirmPassword must be at least 6 characters' }),
+  })
+  .strict({ message: 'Additional properties not allowed' })
+  .superRefine(({ password, confirmPassword }, ctx) => {
+    if (password !== confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Passwords do not match',
+        path: ['confirmPassword'],
+      })
+    }
+  })
+
+export type ResetPasswordBodyType = z.TypeOf<typeof resetPasswordBodySchema>

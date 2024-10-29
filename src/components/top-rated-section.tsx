@@ -1,14 +1,15 @@
 import { useState } from 'react'
 
 import { TOP_RATED_TABS } from '@/constants'
-import { TopRatedParamsType } from '@/lib/schemas/tmdb.schema'
-import { useGetTopRatedQuery } from '@/lib/tanstack-query/use-tmdb'
+
 import MediaTabs from '@/components/media-tabs'
+import { MediaType } from '@/lib/schemas/common-media.schema'
+import { useGetTopRatedQuery } from '@/lib/tanstack-query/use-medias'
 
 export default function TopRatedSection() {
-  const [topRatedType, setTopRatedType] = useState<TopRatedParamsType['topRatedType']>(TOP_RATED_TABS[0].value)
+  const [topRatedType, setTopRatedType] = useState<MediaType>(TOP_RATED_TABS[0].value)
 
-  const { data, isLoading, isSuccess } = useGetTopRatedQuery({ topRatedType })
+  const { data, isSuccess, isLoading } = useGetTopRatedQuery(topRatedType)
 
   return (
     <MediaTabs

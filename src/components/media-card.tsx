@@ -6,11 +6,12 @@ import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 import { CircularProgressBar, MovieSkeletonIcon } from '@/components/icons'
 import placeholderPoster from '/placeholder-poster.svg'
+import { MediaType } from '@/lib/schemas/common-media.schema'
 
 interface Props {
   id: number
   title: string
-  mediaType: 'movie' | 'tv'
+  mediaType: MediaType
   posterPath?: string
   releaseDate: string
   voteAverage: number

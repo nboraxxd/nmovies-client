@@ -1,9 +1,10 @@
 import { Dispatch, SetStateAction } from 'react'
 
-import { TopRatedResponseType, TrendingResponseType } from '@/lib/schemas/tmdb.schema'
 import { MediaCard, MediaCardSkeleton } from '@/components/media-card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import placeholderPoster from '/placeholder-poster.svg'
+import { TVDataType } from '@/lib/schemas/tv.schema'
+import { MovieDataType } from '@/lib/schemas/movies.schema'
 
 interface Props<T extends string> {
   heading: string
@@ -11,7 +12,7 @@ interface Props<T extends string> {
   isSuccess: boolean
   value: T
   setValue: Dispatch<SetStateAction<T>>
-  medias: TrendingResponseType['data'] | TopRatedResponseType['data'] | undefined
+  medias?: (MovieDataType | TVDataType)[]
   tabs: readonly { name: string; value: string }[]
 }
 
@@ -43,11 +44,11 @@ export default function MediaTabs<T extends string>(props: Props<T>) {
                 <MediaCard
                   key={item.id}
                   id={item.id}
-                  title={item.media_type === 'movie' ? item.title : item.name}
-                  mediaType={item.media_type}
-                  posterPath={item.poster_path || placeholderPoster}
-                  releaseDate={item.media_type === 'movie' ? item.release_date : item.first_air_date}
-                  voteAverage={item.vote_average}
+                  title={item.mediaType === 'movie' ? item.title : item.name}
+                  mediaType={item.mediaType}
+                  posterPath={item.posterPath || placeholderPoster}
+                  releaseDate={item.mediaType === 'movie' ? item.releaseDate : item.firstAirDate}
+                  voteAverage={item.voteAverage}
                 />
               ))
           : null}

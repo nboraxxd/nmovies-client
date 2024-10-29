@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
 import { TRENDING_TABS } from '@/constants'
-import { TrendingParamsType } from '@/lib/schemas/tmdb.schema'
-import { useGetTrendingQuery } from '@/lib/tanstack-query/use-tmdb'
+import { TrendingParamsType } from '@/lib/schemas/trending.shema'
+import { useGetTrendingQuery } from '@/lib/tanstack-query/use-medias'
 import MediaTabs from '@/components/media-tabs'
 
 export default function TrendingSection() {

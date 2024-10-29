@@ -6,6 +6,7 @@ import NotFound from '@/pages/not-found'
 import Homepage from '@/pages/home'
 import MovieDetailPage from '@/pages/movie-detail'
 import LoginPage from '@/pages/login'
+import RegisterPage from '@/pages/register'
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Homepage />,
+      },
+      {
+        path: PATH.REGISTER,
+        element: <RegisterPage />,
       },
       {
         path: PATH.LOGIN,
