@@ -9,6 +9,8 @@ import LoginPage from '@/pages/login'
 import RegisterPage from '@/pages/register'
 import ProfilePage from '@/pages/profile'
 import ProfileLayout from '@/layouts/profile'
+import LoggedInLayout from '@/layouts/logged-in'
+import LoggedOutLayout from '@/layouts/logged-out'
 
 export const router = createBrowserRouter([
   {
@@ -21,24 +23,34 @@ export const router = createBrowserRouter([
         element: <Homepage />,
       },
       {
-        path: PATH.REGISTER,
-        element: <RegisterPage />,
-      },
-      {
-        path: PATH.LOGIN,
-        element: <LoginPage />,
+        element: <LoggedOutLayout />,
+        children: [
+          {
+            path: PATH.REGISTER,
+            element: <RegisterPage />,
+          },
+          {
+            path: PATH.LOGIN,
+            element: <LoginPage />,
+          },
+        ],
       },
       {
         path: PATH.MOVIE_DETAIL,
         element: <MovieDetailPage />,
       },
       {
-        path: PATH.PROFILE,
-        element: <ProfileLayout />,
+        element: <LoggedInLayout />,
         children: [
           {
-            index: true,
-            element: <ProfilePage />,
+            path: PATH.PROFILE,
+            element: <ProfileLayout />,
+            children: [
+              {
+                index: true,
+                element: <ProfilePage />,
+              },
+            ],
           },
         ],
       },

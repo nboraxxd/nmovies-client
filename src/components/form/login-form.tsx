@@ -6,8 +6,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { EntityError } from '@/types/error'
 import { isEntityError } from '@/utils/error'
+import { useAuthStore } from '@/lib/stores/auth-store'
 import { useLogin } from '@/lib/tanstack-query/use-auth'
 import { loginBodySchema, LoginBodyType } from '@/lib/schemas/auth.schema'
+
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -22,12 +24,15 @@ export default function LoginForm() {
   })
 
   const loginMutation = useLogin()
+  const setIsAuth = useAuthStore((state) => state.setIsAuth)
 
   async function onValid(values: LoginBodyType) {
     if (loginMutation.isPending) return
 
     try {
       await loginMutation.mutateAsync(values)
+
+      setIsAuth(true)
     } catch (error) {
       if (isEntityError<EntityError>(error)) {
         const formErrors = error.response?.data

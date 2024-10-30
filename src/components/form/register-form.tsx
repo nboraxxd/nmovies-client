@@ -5,8 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { EntityError } from '@/types/error'
 import { isEntityError } from '@/utils/error'
+import { useAuthStore } from '@/lib/stores/auth-store'
 import { useRegister } from '@/lib/tanstack-query/use-auth'
 import { registerBodySchema, RegisterBodyType } from '@/lib/schemas/auth.schema'
+
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -23,12 +25,15 @@ export default function RegisterForm() {
   })
 
   const registerMutation = useRegister()
+  const setIsAuth = useAuthStore((state) => state.setIsAuth)
 
   async function onValid(values: RegisterBodyType) {
     if (registerMutation.isPending) return
 
     try {
       await registerMutation.mutateAsync(values)
+
+      setIsAuth(true)
     } catch (error) {
       if (isEntityError<EntityError>(error)) {
         const formErrors = error.response?.data
