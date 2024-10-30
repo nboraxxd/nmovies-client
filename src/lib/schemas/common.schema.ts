@@ -1,6 +1,6 @@
 import z from 'zod'
 
-export const nameSchema = z.string({ required_error: 'Name is required' }).trim()
+export const nameSchema = z.string().trim().min(1, { message: 'Name is required' })
 
 export const emailSchema = z.string({ required_error: 'Email is required' }).trim().email({ message: 'Invalid email' })
 

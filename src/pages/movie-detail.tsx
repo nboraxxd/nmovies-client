@@ -23,7 +23,6 @@ export default function MovieDetailPage() {
   const screenplays = movieDetail?.credits.crew
     .filter((crew) => crew.job === 'Screenplay')
     .map((screenplay) => screenplay.name)
-  console.log('🔥 ~ MovieDetailPage ~ directors:', movieDetail)
 
   const getRecommendedMoviesQuery = useGetRecommendedMoviesQuery({ movieId: Number(movieId) })
   const recommendedMovies = getRecommendedMoviesQuery.isSuccess ? getRecommendedMoviesQuery.data.data : []

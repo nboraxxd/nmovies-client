@@ -1,3 +1,5 @@
+import { FolderHeartIcon, MessageSquareMoreIcon, SettingsIcon } from 'lucide-react'
+
 export const AVATAR_SIZE_LIMIT = 1 * 1024 * 1024 // 1MB
 
 export const TRENDING_TABS = [
@@ -38,4 +40,22 @@ export const FOOTER_LINKS = [
   'Top IMDB',
   'About us',
   'Privacy policy',
+] as const
+
+export const PROFILE_NAV = [
+  {
+    label: 'Profile',
+    to: '/profile',
+    icon: SettingsIcon,
+  },
+  {
+    label: 'Favorites',
+    to: '/profile/favorites',
+    icon: FolderHeartIcon,
+  },
+  {
+    label: 'Comments',
+    to: '/profile/comments',
+    icon: MessageSquareMoreIcon,
+  },
 ] as const

@@ -13,8 +13,8 @@ import { AuthResponseType } from '@/lib/schemas/auth.schema'
 
 class Http {
   instance: AxiosInstance
-  private accessToken: string
-  private refreshToken: string
+  private accessToken: string | null
+  private refreshToken: string | null
   // private refreshTokenRequest: Promise<string> | null
 
   constructor() {
@@ -48,8 +48,8 @@ class Http {
           setAccessTokenToLocalStorage(this.accessToken)
           setRefreshTokenToLocalStorage(this.refreshToken)
         } else if (url === LOGOUT_API_URL) {
-          this.accessToken = ''
-          this.refreshToken = ''
+          this.accessToken = null
+          this.refreshToken = null
           removeTokensFromLocalStorage()
         }
 

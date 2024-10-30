@@ -35,7 +35,7 @@ export default tseslint.config(
           argsIgnorePattern: '^_',
         },
       ],
-      'tailwindcss/no-custom-classname': ['warn', { whitelist: ['mySwiper'] }],
+      'tailwindcss/no-custom-classname': ['warn', { whitelist: ['mySwiper', 'toaster'] }],
       'prettier/prettier': [
         'warn',
         {

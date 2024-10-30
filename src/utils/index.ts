@@ -13,3 +13,7 @@ export function currencyFormatter(number: number, currency = 'USD') {
 
   return formatter.format(number).replace(/\D00(?=\D*$)/, '')
 }
+
+export function capitalizeFirstLetter(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}

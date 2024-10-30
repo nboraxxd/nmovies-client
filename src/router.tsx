@@ -7,6 +7,8 @@ import Homepage from '@/pages/home'
 import MovieDetailPage from '@/pages/movie-detail'
 import LoginPage from '@/pages/login'
 import RegisterPage from '@/pages/register'
+import ProfilePage from '@/pages/profile'
+import ProfileLayout from '@/layouts/profile'
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +31,16 @@ export const router = createBrowserRouter([
       {
         path: PATH.MOVIE_DETAIL,
         element: <MovieDetailPage />,
+      },
+      {
+        path: PATH.PROFILE,
+        element: <ProfileLayout />,
+        children: [
+          {
+            index: true,
+            element: <ProfilePage />,
+          },
+        ],
       },
     ],
   },

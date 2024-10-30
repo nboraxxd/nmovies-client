@@ -1,5 +1,6 @@
 import http from '@/utils/http'
-import { AuthResponseType, LoginBodyType, RegisterBodyType } from '@/lib/schemas/auth.schema'
+import { AuthResponseType, ChangePasswordBodyType, LoginBodyType, RegisterBodyType } from '@/lib/schemas/auth.schema'
+import { MessageResponseType } from '@/lib/schemas/common.schema'
 
 export const AUTH_API_URL = '/auth'
 
@@ -13,6 +14,9 @@ const authsApi = {
   register: (body: RegisterBodyType) => http.post<AuthResponseType>(REGISTER_API_URL, body),
 
   login: (body: LoginBodyType) => http.post<AuthResponseType>(LOGIN_API_URL, body),
+
+  changePassword: (body: ChangePasswordBodyType) =>
+    http.patch<MessageResponseType>(`${AUTH_API_URL}/change-password`, body),
 }
 
 export default authsApi
