@@ -4,14 +4,14 @@ import { LoaderCircleIcon } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { EntityError } from '@/types/error'
-import { isEntityError } from '@/utils/error'
-import { useAuthStore } from '@/lib/stores/auth-store'
+import { isAxiosEntityError } from '@/utils/error'
 import { useRegister } from '@/lib/tanstack-query/use-auth'
 import { registerBodySchema, RegisterBodyType } from '@/lib/schemas/auth.schema'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import envVariables from '@/lib/schemas/env-variables.schema'
 
 export default function RegisterForm() {
   const form = useForm<RegisterBodyType>({
@@ -21,21 +21,19 @@ export default function RegisterForm() {
       email: '',
       password: '',
       confirmPassword: '',
+      clientUrl: envVariables.VITE_CLIENT_URL,
     },
   })
 
   const registerMutation = useRegister()
-  const setIsAuth = useAuthStore((state) => state.setIsAuth)
 
   async function onValid(values: RegisterBodyType) {
     if (registerMutation.isPending) return
 
     try {
       await registerMutation.mutateAsync(values)
-
-      setIsAuth(true)
     } catch (error) {
-      if (isEntityError<EntityError>(error)) {
+      if (isAxiosEntityError<EntityError>(error)) {
         const formErrors = error.response?.data
         if (formErrors) {
           formErrors.errors.forEach(({ path, message }) => {

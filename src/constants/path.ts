@@ -6,5 +6,6 @@ export const PATH = {
   MOVIE_DETAIL: `/${MOVIES}/:movieId`,
   LOGIN: '/login',
   REGISTER: '/register',
+  VERIFY_EMAIL: '/verify-email',
   PROFILE: '/profile',
 }

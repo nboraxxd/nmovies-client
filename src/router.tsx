@@ -11,6 +11,7 @@ import ProfilePage from '@/pages/profile'
 import ProfileLayout from '@/layouts/profile'
 import LoggedInLayout from '@/layouts/logged-in'
 import LoggedOutLayout from '@/layouts/logged-out'
+import VerifyEmailPage from '@/pages/verify-email'
 
 export const router = createBrowserRouter([
   {
@@ -55,5 +56,9 @@ export const router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: PATH.VERIFY_EMAIL,
+    element: <VerifyEmailPage />,
   },
 ])

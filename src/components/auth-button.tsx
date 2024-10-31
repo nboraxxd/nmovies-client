@@ -11,7 +11,7 @@ import {
 
 import { cn } from '@/utils'
 import { useAuthStore } from '@/lib/stores/auth-store'
-import { useGetProfileQuery } from '@/lib/tanstack-query/use-profile'
+import { useProfileQuery } from '@/lib/tanstack-query/use-profile'
 import { UserDocumentResponseType } from '@/lib/schemas/profile.schema'
 
 import { Button } from '@/components/ui/button'
@@ -30,7 +30,7 @@ import {
 export default function AuthButton() {
   const isAuth = useAuthStore((state) => state.isAuth)
 
-  const { data, isSuccess, isLoading } = useGetProfileQuery({ enabled: isAuth })
+  const { data, isSuccess, isLoading } = useProfileQuery({ enabled: isAuth })
 
   if (isLoading) return <Skeleton className="size-10" />
 

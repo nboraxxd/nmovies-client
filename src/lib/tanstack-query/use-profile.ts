@@ -1,23 +1,27 @@
-import profileApi from '@/apis/profile.api'
-import { UpdateProfileResponseType } from '@/lib/schemas/profile.schema'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-export function useGetProfileQuery(payload?: {
-  enabled?: boolean
-  onSuccess?: (data: UpdateProfileResponseType['data']) => void
-}) {
-  return useQuery({
-    queryFn: () =>
-      profileApi.getProfile().then((res) => {
-        if (payload?.onSuccess) {
-          payload.onSuccess(res.data)
-        }
+import profileApi from '@/apis/profile.api'
+import { useAuthStore } from '@/lib/stores/auth-store'
+import { useEffect } from 'react'
 
-        return res
-      }),
+export function useProfileQuery(payload?: { enabled?: boolean }) {
+  const setIsAuth = useAuthStore((state) => state.setIsAuth)
+  const setProfile = useAuthStore((state) => state.setProfile)
+
+  const getProfileQuery = useQuery({
+    queryFn: profileApi.getProfile,
     queryKey: ['profile'],
     enabled: payload?.enabled ?? true,
   })
+
+  useEffect(() => {
+    if (getProfileQuery.isSuccess) {
+      setIsAuth(true)
+      setProfile(getProfileQuery.data.data)
+    }
+  }, [getProfileQuery.data?.data, getProfileQuery.isSuccess, setIsAuth, setProfile])
+
+  return getProfileQuery
 }
 
 export function useUploadAvatarMutation() {
@@ -27,7 +31,7 @@ export function useUploadAvatarMutation() {
 }
 
 export function useUpdateProfileMutation() {
-  const getProfileQuery = useGetProfileQuery({ enabled: false })
+  const getProfileQuery = useProfileQuery({ enabled: false })
 
   return useMutation({
     mutationFn: profileApi.updateProfile,

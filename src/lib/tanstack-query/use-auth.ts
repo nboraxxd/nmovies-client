@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query'
 
 import authsApi from '@/apis/auths.api'
-import { useGetProfileQuery } from '@/lib/tanstack-query/use-profile'
+import { useProfileQuery } from '@/lib/tanstack-query/use-profile'
 
 export function useRegister() {
-  const getProfileQuery = useGetProfileQuery({ enabled: false })
+  const getProfileQuery = useProfileQuery({ enabled: false })
 
   return useMutation({
     mutationFn: authsApi.register,
@@ -12,8 +12,18 @@ export function useRegister() {
   })
 }
 
+export function useResendEmailVerification() {
+  return useMutation({ mutationFn: authsApi.resendEmailVerification })
+}
+
+export function useVerifyEmail() {
+  const getProfileQuery = useProfileQuery({ enabled: false })
+
+  return useMutation({ mutationFn: authsApi.verifyEmail, onSuccess: () => getProfileQuery.refetch() })
+}
+
 export function useLogin() {
-  const getProfileQuery = useGetProfileQuery({ enabled: false })
+  const getProfileQuery = useProfileQuery({ enabled: false })
 
   return useMutation({ mutationFn: authsApi.login, onSuccess: () => getProfileQuery.refetch() })
 }

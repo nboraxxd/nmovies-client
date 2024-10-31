@@ -5,8 +5,7 @@ import { LoaderCircleIcon } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { EntityError } from '@/types/error'
-import { isEntityError } from '@/utils/error'
-import { useAuthStore } from '@/lib/stores/auth-store'
+import { isAxiosEntityError } from '@/utils/error'
 import { useLogin } from '@/lib/tanstack-query/use-auth'
 import { loginBodySchema, LoginBodyType } from '@/lib/schemas/auth.schema'
 
@@ -24,17 +23,14 @@ export default function LoginForm() {
   })
 
   const loginMutation = useLogin()
-  const setIsAuth = useAuthStore((state) => state.setIsAuth)
 
   async function onValid(values: LoginBodyType) {
     if (loginMutation.isPending) return
 
     try {
       await loginMutation.mutateAsync(values)
-
-      setIsAuth(true)
     } catch (error) {
-      if (isEntityError<EntityError>(error)) {
+      if (isAxiosEntityError<EntityError>(error)) {
         const formErrors = error.response?.data
         if (formErrors) {
           formErrors.errors.forEach(({ path, message }) => {

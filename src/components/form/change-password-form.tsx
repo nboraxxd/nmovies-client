@@ -5,7 +5,7 @@ import { LoaderCircleIcon } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { EntityError } from '@/types/error'
-import { isEntityError } from '@/utils/error'
+import { isAxiosEntityError } from '@/utils/error'
 import { useChangePassword } from '@/lib/tanstack-query/use-auth'
 import { changePasswordBodySchema, ChangePasswordBodyType } from '@/lib/schemas/auth.schema'
 
@@ -33,7 +33,7 @@ export default function UpdateProfileForm() {
 
       toast.success(response.message)
     } catch (error) {
-      if (isEntityError<EntityError>(error)) {
+      if (isAxiosEntityError<EntityError>(error)) {
         const formErrors = error.response?.data
 
         if (formErrors) {

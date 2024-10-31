@@ -1,6 +1,9 @@
+import { toast } from 'sonner'
 import axios, { AxiosError, AxiosInstance } from 'axios'
 
+import { HttpStatusCode } from '@/constants/http-status-code'
 import envVariables from '@/lib/schemas/env-variables.schema'
+import { AuthResponseType } from '@/lib/schemas/auth.schema'
 import {
   getAccessTokenFromLocalStorage,
   getRefreshTokenFromLocalStorage,
@@ -8,8 +11,7 @@ import {
   setAccessTokenToLocalStorage,
   setRefreshTokenToLocalStorage,
 } from '@/utils/local-storage'
-import { LOGIN_API_URL, LOGOUT_API_URL, REGISTER_API_URL } from '@/apis/auths.api'
-import { AuthResponseType } from '@/lib/schemas/auth.schema'
+import { LOGIN_API_URL, LOGOUT_API_URL, REGISTER_API_URL, VERIFY_EMAIL_API_URL } from '@/apis/auths.api'
 
 class Http {
   instance: AxiosInstance
@@ -41,7 +43,7 @@ class Http {
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config
-        if (url === LOGIN_API_URL || url === REGISTER_API_URL) {
+        if (url && [LOGIN_API_URL, REGISTER_API_URL, VERIFY_EMAIL_API_URL].some((item) => item.startsWith(url))) {
           this.accessToken = (response.data as AuthResponseType).data.accessToken
           this.refreshToken = (response.data as AuthResponseType).data.refreshToken
 
@@ -55,7 +57,15 @@ class Http {
 
         return response.data
       },
-      (error: AxiosError) => Promise.reject(error)
+      (error: AxiosError) => {
+        if (!(error.status === HttpStatusCode.Unauthorized) && !(error.status === HttpStatusCode.UnprocessableEntity)) {
+          const data: any | undefined = error.response?.data
+          const message = data?.message || error.message
+          toast.error(message)
+        }
+
+        return Promise.reject(error)
+      }
     )
   }
 }

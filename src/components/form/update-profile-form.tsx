@@ -6,33 +6,33 @@ import { LoaderCircleIcon, UploadIcon } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { EntityError } from '@/types/error'
-import { isEntityError } from '@/utils/error'
+import { isAxiosEntityError } from '@/utils/error'
 import { AVATAR_SIZE_LIMIT } from '@/constants'
 import { updateProfileBodySchema, UpdateProfileBodyType } from '@/lib/schemas/profile.schema'
-import { useGetProfileQuery, useUpdateProfileMutation, useUploadAvatarMutation } from '@/lib/tanstack-query/use-profile'
+import { useUpdateProfileMutation, useUploadAvatarMutation } from '@/lib/tanstack-query/use-profile'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { useAuthStore } from '@/lib/stores/auth-store'
 
 export default function UpdateProfileForm() {
   const [file, setFile] = useState<File | null>(null)
   const avatarInputRef = useRef<HTMLInputElement>(null)
 
-  const getProfileQuery = useGetProfileQuery()
+  const profile = useAuthStore((state) => state.profile)
   const uploadAvatarMutation = useUploadAvatarMutation()
   const updateProfileMutation = useUpdateProfileMutation()
 
-  const isProcessingForm =
-    uploadAvatarMutation.isPending || updateProfileMutation.isPending || !getProfileQuery.isSuccess
+  const isProcessingForm = uploadAvatarMutation.isPending || updateProfileMutation.isPending || !profile
 
   const form = useForm<UpdateProfileBodyType>({
     resolver: zodResolver(updateProfileBodySchema),
     defaultValues: {
-      name: getProfileQuery.data?.data.name ?? '',
-      avatar: getProfileQuery.data?.data.avatar ?? undefined,
+      name: profile?.name ?? '',
+      avatar: profile?.avatar ?? undefined,
     },
   })
 
@@ -54,13 +54,13 @@ export default function UpdateProfileForm() {
   }, [file, previewAvatar])
 
   useEffect(() => {
-    if (getProfileQuery.isSuccess) {
+    if (profile) {
       form.reset({
-        avatar: getProfileQuery.data.data.avatar ?? undefined,
-        name: getProfileQuery.data.data.name,
+        avatar: profile.avatar ?? undefined,
+        name: profile.name,
       })
     }
-  }, [form, getProfileQuery.data?.data.avatar, getProfileQuery.data?.data.name, getProfileQuery.isSuccess])
+  }, [form, profile])
 
   function onChangeAvatar(ev: React.ChangeEvent<HTMLInputElement>) {
     form.clearErrors('avatar')
@@ -82,7 +82,7 @@ export default function UpdateProfileForm() {
   async function onValid(values: UpdateProfileBodyType) {
     if (isProcessingForm) return
 
-    if (values.avatar === previewAvatar && values.name === getProfileQuery.data.data.name) {
+    if (values.avatar === previewAvatar && values.name === profile.name) {
       toast.info('No changes detected')
       return
     }
@@ -93,7 +93,7 @@ export default function UpdateProfileForm() {
         form.append('avatar', file)
 
         const uploadAvatarRes = await uploadAvatarMutation.mutateAsync(form)
-        values.avatar = uploadAvatarRes.data
+        values.avatar = uploadAvatarRes.data.url
       }
 
       const updateProfileRes = await updateProfileMutation.mutateAsync(values)
@@ -101,7 +101,7 @@ export default function UpdateProfileForm() {
       toast.success(updateProfileRes.message)
       setFile(null)
     } catch (error) {
-      if (isEntityError<EntityError>(error)) {
+      if (isAxiosEntityError<EntityError>(error)) {
         const formErrors = error.response?.data
         if (formErrors) {
           formErrors.errors.forEach(({ path, message }) => {
@@ -121,17 +121,17 @@ export default function UpdateProfileForm() {
           name="avatar"
           render={() => (
             <FormItem className="flex flex-col items-center gap-1">
-              {getProfileQuery.isSuccess ? (
+              {profile ? (
                 <Avatar className="size-20">
                   {previewAvatar ? (
                     <img
                       src={previewAvatar}
-                      alt={getProfileQuery.data.data.name}
+                      alt={profile.name}
                       className="relative flex size-full shrink-0 object-cover"
                     />
                   ) : (
                     <AvatarFallback className="text-2xl font-semibold">
-                      {getProfileQuery.data.data.name.slice(0, 2).toLocaleUpperCase()}
+                      {profile.name.slice(0, 2).toLocaleUpperCase()}
                     </AvatarFallback>
                   )}
                 </Avatar>
