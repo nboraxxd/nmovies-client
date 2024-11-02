@@ -3,6 +3,9 @@ import { UserDocumentResponseType } from '@/lib/schemas/profile.schema'
 const ACCESS_TOKEN = 'accessToken'
 const REFRESH_TOKEN = 'refreshToken'
 const PROFILE = 'profile'
+export const REMOVE_TOKENS_EVENT = 'removeTokensFromLocalStorage'
+
+export const localStorageEventTarget = new EventTarget()
 
 export const setAccessTokenToLocalStorage = (accessToken: string) => localStorage.setItem(ACCESS_TOKEN, accessToken)
 
@@ -23,4 +26,5 @@ export const getProfileFromLocalStorage = () => {
 export const removeTokensFromLocalStorage = () => {
   localStorage.removeItem(ACCESS_TOKEN)
   localStorage.removeItem(REFRESH_TOKEN)
+  localStorageEventTarget.dispatchEvent(new Event(REMOVE_TOKENS_EVENT))
 }

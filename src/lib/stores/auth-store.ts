@@ -7,7 +7,7 @@ type AuthStore = {
   isAuth: boolean
   setIsAuth: (isAuth: boolean) => void
   profile: UserDocumentResponseType | null
-  setProfile: (profile: UserDocumentResponseType) => void
+  setProfile: (profile: UserDocumentResponseType | null) => void
 }
 
 export const useAuthStore = create<AuthStore>()(

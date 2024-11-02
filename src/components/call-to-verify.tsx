@@ -1,9 +1,10 @@
 import { toast } from 'sonner'
-
-import { Button } from '@/components/ui/button'
 import { LoaderCircleIcon } from 'lucide-react'
+
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { useResendEmailVerification } from '@/lib/tanstack-query/use-auth'
+
+import { Button } from '@/components/ui/button'
 
 export default function CallToVerify() {
   const profile = useAuthStore((state) => state.profile)
