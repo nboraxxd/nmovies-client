@@ -5,6 +5,8 @@ import { CircularProgressBar } from '@/components/icons'
 import placeholderBackdrop from '/placeholder-backdrop.svg'
 import placeholderPoster from '/placeholder-poster.svg'
 import { GenreType } from '@/lib/schemas/common-media.schema'
+import FavoriteButton from '@/components/media-detail/favorite-button'
+import { useAuthStore } from '@/lib/stores/auth-store'
 
 interface Props {
   title: string
@@ -15,9 +17,9 @@ interface Props {
   screenplays: string[]
   writers: string[]
   genres: GenreType[]
-  backdrop?: string
-  poster?: string
-  certification?: string
+  poster: string | null
+  backdrop: string | null
+  certification: string | null
 }
 
 export default function Banner(props: Props) {
@@ -34,6 +36,8 @@ export default function Banner(props: Props) {
     certification,
     poster,
   } = props
+
+  const isAuth = useAuthStore((state) => state.isAuth)
 
   return (
     <div className="relative">
@@ -67,12 +71,13 @@ export default function Banner(props: Props) {
             <div className="hidden md:line-clamp-1">{genres.map((genre) => genre.name).join(', ')}</div>
           </div>
 
-          <div className="mt-6 flex items-center gap-6">
+          <div className="mt-6 flex items-center gap-4">
             <CircularProgressBar percent={Math.round(voteAverage * 10)} className="relative" />
             <Button variant="secondary">
               <PlayIcon className="mr-1 size-4" />
               Trailer
             </Button>
+            {isAuth ? <FavoriteButton mediaPoster={poster} mediaReleaseDate={releaseDate} mediaTitle={title} /> : null}
           </div>
 
           <div className="mt-6 space-y-1.5 md:mt-8">

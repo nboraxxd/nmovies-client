@@ -4,11 +4,12 @@ import { CaretSortIcon } from '@radix-ui/react-icons'
 
 import { cn, currencyFormatter } from '@/utils'
 import { useGetMovieDetailQuery, useGetRecommendedMoviesQuery } from '@/lib/tanstack-query/use-movies'
+
 import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Heading } from '@/components/common'
-import { CastCard, Banner } from '@/components/media-detail'
 import { MediaCard } from '@/components/media-card'
+import { CastCard, Banner } from '@/components/media-detail'
 
 export default function MovieDetailPage() {
   const [isExtended, setIsExtended] = useState(false)
@@ -39,9 +40,9 @@ export default function MovieDetailPage() {
           screenplays={screenplays ?? []}
           writers={writers ?? []}
           genres={movieDetail.genres}
-          backdrop={movieDetail.backdropPath || undefined}
-          poster={movieDetail.posterPath || undefined}
-          certification={movieDetail.certification || undefined}
+          backdrop={movieDetail.backdropPath}
+          poster={movieDetail.posterPath}
+          certification={movieDetail.certification}
         />
       ) : null}
 

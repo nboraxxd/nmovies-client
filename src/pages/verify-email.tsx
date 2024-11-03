@@ -4,9 +4,9 @@ import { LoaderCircleIcon } from 'lucide-react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { PATH } from '@/constants/path'
-import { useVerifyEmail } from '@/lib/tanstack-query/use-auth'
-import { isAxiosUnauthorizedError } from '@/utils/error'
 import { UnauthorizedError } from '@/types/error'
+import { isAxiosUnauthorizedError } from '@/utils/error'
+import { useVerifyEmail } from '@/lib/tanstack-query/use-auth'
 
 export default function VerifyEmailPage() {
   const verifyEmailRef = useRef<unknown>(null)
@@ -20,7 +20,8 @@ export default function VerifyEmailPage() {
   useEffect(() => {
     let timeout: NodeJS.Timeout | null = null
 
-    if (emailVerifyToken && !verifyEmailRef.current) {
+    if (emailVerifyToken) {
+      if (verifyEmailRef.current) return
       ;(async () => {
         verifyEmailRef.current = mutateAsync
 

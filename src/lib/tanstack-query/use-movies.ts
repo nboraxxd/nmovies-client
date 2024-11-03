@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import moviesApi from '@/apis/movies.api'
 import { PageQueryType } from '@/lib/schemas/common-media.schema'
 import { DiscoverMoviesQueryType, MovieIdParamsType } from '@/lib/schemas/movies.schema'
+import { QUERY_KEY } from '@/constants/tanstack-key'
 
 export function useGetDiscoverMoviesQuery(query?: DiscoverMoviesQueryType) {
   return useQuery({
@@ -14,7 +15,7 @@ export function useGetDiscoverMoviesQuery(query?: DiscoverMoviesQueryType) {
 export function useGetMovieDetailQuery(movieId: number) {
   return useQuery({
     queryFn: () => moviesApi.getMovieDetail(movieId),
-    queryKey: ['movieDetail', movieId],
+    queryKey: [QUERY_KEY.MOVIE_DETAIL, movieId],
   })
 }
 

@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
 import { LoaderCircleIcon } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -6,12 +7,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { EntityError } from '@/types/error'
 import { isAxiosEntityError } from '@/utils/error'
 import { useRegister } from '@/lib/tanstack-query/use-auth'
+import envVariables from '@/lib/schemas/env-variables.schema'
 import { registerBodySchema, RegisterBodyType } from '@/lib/schemas/auth.schema'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import envVariables from '@/lib/schemas/env-variables.schema'
 
 export default function RegisterForm() {
   const form = useForm<RegisterBodyType>({
@@ -28,10 +29,13 @@ export default function RegisterForm() {
   const registerMutation = useRegister()
 
   async function onValid(values: RegisterBodyType) {
+    console.log('🔥 ~ onValid ~ values:', values)
     if (registerMutation.isPending) return
 
     try {
-      await registerMutation.mutateAsync(values)
+      const response = await registerMutation.mutateAsync(values)
+
+      toast.success(response.message)
     } catch (error) {
       if (isAxiosEntityError<EntityError>(error)) {
         const formErrors = error.response?.data
@@ -46,7 +50,7 @@ export default function RegisterForm() {
 
   return (
     <Form {...form}>
-      <form className="w-full space-y-6" noValidate onSubmit={form.handleSubmit(onValid)}>
+      <form className="w-full space-y-6" noValidate onSubmit={form.handleSubmit(onValid, (err) => console.log(err))}>
         <FormField
           control={form.control}
           name="name"
