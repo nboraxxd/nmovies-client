@@ -10,6 +10,7 @@ import {
 } from '@/lib/tanstack-query/use-favorites'
 
 import { Button } from '@/components/ui/button'
+import { useEffect, useState } from 'react'
 
 interface Props {
   mediaTitle: string
@@ -25,14 +26,22 @@ export default function FavoriteButton(props: Props) {
   const mediaType: MediaType = params.movieId ? 'movie' : 'tv'
 
   const checkFavoriteByMediaQuery = useCheckFavoriteByMediaQuery({ mediaId, mediaType })
+
+  const [isFavorite, setIsFavorite] = useState<boolean | undefined>()
+
   const addFavoriteMutation = useAddFavoriteMutation()
   const deleteFavoriteMutation = useDeleteFavoriteByMediaMutation()
 
-  const isDisabled =
-    addFavoriteMutation.isPending || deleteFavoriteMutation.isPending || checkFavoriteByMediaQuery.isFetching
+  const isDisabled = addFavoriteMutation.isPending || deleteFavoriteMutation.isPending
+
+  useEffect(() => {
+    if (checkFavoriteByMediaQuery.isSuccess) {
+      setIsFavorite(checkFavoriteByMediaQuery.data.data.isFavorite)
+    }
+  }, [checkFavoriteByMediaQuery.data?.data.isFavorite, checkFavoriteByMediaQuery.isSuccess])
 
   async function handleAddFavorite() {
-    if (addFavoriteMutation.isPending || checkFavoriteByMediaQuery.isFetching) return
+    if (addFavoriteMutation.isPending) return
 
     const response = await addFavoriteMutation.mutateAsync({
       mediaId,
@@ -42,36 +51,31 @@ export default function FavoriteButton(props: Props) {
       mediaType,
     })
 
-    await checkFavoriteByMediaQuery.refetch()
-
+    setIsFavorite(true)
     toast.success(response.message)
   }
 
   async function handleRemoveFavorite() {
-    if (deleteFavoriteMutation.isPending || checkFavoriteByMediaQuery.isFetching) return
+    if (deleteFavoriteMutation.isPending) return
 
     const response = await deleteFavoriteMutation.mutateAsync({ mediaId, mediaType })
 
-    await checkFavoriteByMediaQuery.refetch()
-
+    setIsFavorite(false)
     toast.success(response.message)
   }
 
-  return checkFavoriteByMediaQuery.isSuccess ? (
+  return (
     <Button
       variant="ghost"
       size="icon"
-      onClick={!checkFavoriteByMediaQuery.data.data.isFavorite ? handleAddFavorite : handleRemoveFavorite}
+      onClick={!isFavorite ? handleAddFavorite : handleRemoveFavorite}
       disabled={isDisabled}
     >
       {isDisabled ? (
         <LoaderCircleIcon className="size-6 animate-spin" />
       ) : (
-        <HeartIcon
-          className="size-6 text-primary"
-          fill={checkFavoriteByMediaQuery.data.data.isFavorite ? '#e00000' : 'transparent'}
-        />
+        <HeartIcon className="size-6 text-primary" fill={isFavorite ? '#e00000' : 'transparent'} />
       )}
     </Button>
-  ) : null
+  )
 }

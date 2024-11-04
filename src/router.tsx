@@ -12,6 +12,7 @@ import ProfileLayout from '@/layouts/profile'
 import LoggedInLayout from '@/layouts/logged-in'
 import LoggedOutLayout from '@/layouts/logged-out'
 import VerifyEmailPage from '@/pages/verify-email'
+import TvDetailPage from '@/pages/tv-detail'
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,14 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Homepage />,
+      },
+      {
+        path: PATH.MOVIE_DETAIL,
+        element: <MovieDetailPage />,
+      },
+      {
+        path: PATH.TV_DETAIL,
+        element: <TvDetailPage />,
       },
       {
         element: <LoggedOutLayout />,
@@ -35,10 +44,6 @@ export const router = createBrowserRouter([
             element: <LoginPage />,
           },
         ],
-      },
-      {
-        path: PATH.MOVIE_DETAIL,
-        element: <MovieDetailPage />,
       },
       {
         element: <LoggedInLayout />,

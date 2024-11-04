@@ -8,7 +8,7 @@ import { QUERY_KEY } from '@/constants/tanstack-key'
 export function useGetDiscoverMoviesQuery(query?: DiscoverMoviesQueryType) {
   return useQuery({
     queryFn: () => moviesApi.discoverMovies(query),
-    queryKey: ['discoverMovies', query],
+    queryKey: [QUERY_KEY.DISCOVER_MOVIES, query],
   })
 }
 
@@ -22,6 +22,6 @@ export function useGetMovieDetailQuery(movieId: number) {
 export function useGetRecommendedMoviesQuery(params: MovieIdParamsType & PageQueryType) {
   return useQuery({
     queryFn: () => moviesApi.getRecommendedMovies(params),
-    queryKey: ['recommendedMovies', params],
+    queryKey: [QUERY_KEY.RECOMMENDED_MOVIES, params],
   })
 }

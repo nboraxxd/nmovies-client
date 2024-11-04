@@ -22,7 +22,7 @@ function MediaCard({ id, mediaType, posterPath, releaseDate, title, voteAverage 
 
   return (
     <Card>
-      <Link to={`${PATH.MOVIES}/${id}`} className="flex h-full flex-col">
+      <Link to={`${mediaType === 'movie' ? PATH.MOVIES : PATH.TVS}/${id}`} className="flex h-full flex-col">
         <AspectRatio ratio={2 / 3}>
           <img src={posterPath || placeholderPoster} alt={title} className="size-full rounded-t-xl object-cover" />
           {mediaType === 'tv' ? (
