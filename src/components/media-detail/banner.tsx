@@ -7,6 +7,7 @@ import placeholderPoster from '/placeholder-poster.svg'
 import { GenreType } from '@/lib/schemas/common-media.schema'
 import FavoriteButton from '@/components/media-detail/favorite-button'
 import { useAuthStore } from '@/lib/stores/auth-store'
+import { ImageWithLoading } from '@/components/common'
 
 interface Props {
   title: string
@@ -43,7 +44,9 @@ export default function Banner(props: Props) {
     <div className="relative">
       {/* Backdrop */}
       <div className="relative pb-[100%] sm:pb-[72%] md:pb-[56%] lg:pb-[42%] xl:pb-[36%]">
-        <img
+        <ImageWithLoading
+          width={1920}
+          height={664}
           src={backdrop || placeholderBackdrop}
           alt={title}
           className="absolute inset-0 size-full object-cover brightness-[0.2]"

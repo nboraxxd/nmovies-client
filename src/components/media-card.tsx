@@ -7,6 +7,9 @@ import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/c
 import { CircularProgressBar, MovieSkeletonIcon } from '@/components/icons'
 import placeholderPoster from '/placeholder-poster.svg'
 import { MediaType } from '@/lib/schemas/common-media.schema'
+import { useState } from 'react'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
+import { cn } from '@/utils'
 
 interface Props {
   id: number
@@ -18,13 +21,22 @@ interface Props {
 }
 
 function MediaCard({ id, mediaType, posterPath, releaseDate, title, voteAverage }: Props) {
+  const [isImageLoaded, setIsImageLoaded] = useState(false)
+
   const percent = Math.round(voteAverage * 10)
 
   return (
     <Card>
       <Link to={`${mediaType === 'movie' ? PATH.MOVIES : PATH.TVS}/${id}`} className="flex h-full flex-col">
         <AspectRatio ratio={2 / 3}>
-          <img src={posterPath || placeholderPoster} alt={title} className="size-full rounded-t-xl object-cover" />
+          <LazyLoadImage
+            src={posterPath || placeholderPoster}
+            alt={title}
+            onLoad={() => setIsImageLoaded(true)}
+            className={cn('size-full rounded-t-xl object-cover transition', {
+              'blur-md': !isImageLoaded,
+            })}
+          />
           {mediaType === 'tv' ? (
             <div className="absolute right-1 top-1 rounded bg-background p-1 text-sm text-foreground shadow-md">
               TV Series

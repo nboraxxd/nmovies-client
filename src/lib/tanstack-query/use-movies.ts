@@ -19,6 +19,13 @@ export function useGetMovieDetailQuery(movieId: number) {
   })
 }
 
+export function useGetMovieCreditsQuery(movieId: number) {
+  return useQuery({
+    queryFn: () => moviesApi.getMovieCredits({ movieId }),
+    queryKey: [QUERY_KEY.MOVIE_CREDITS, movieId],
+  })
+}
+
 export function useGetRecommendedMoviesQuery(params: MovieIdParamsType & PageQueryType) {
   return useQuery({
     queryFn: () => moviesApi.getRecommendedMovies(params),

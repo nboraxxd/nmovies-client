@@ -3,6 +3,7 @@ export const QUERY_KEY = {
 
   DISCOVER_MOVIES: 'discoverMovies',
   MOVIE_DETAIL: 'movieDetail',
+  MOVIE_CREDITS: 'movieCredits',
   RECOMMENDED_MOVIES: 'recommendedMovies',
 
   DISCOVER_TVS: 'discoverTvs',
