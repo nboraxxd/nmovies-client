@@ -1,5 +1,5 @@
-export { default as Banner } from './banner'
+export { Banner, BannerSkeleton } from './banner'
 export { default as FavoriteButton } from './favorite-button'
-export { default as CastList } from './cast-list'
+export { MovieCastList, TvCastList } from './cast-list'
 export { CastCard, CastCardSkeleton } from './cast-card'
 export { default as MediaInfo } from './media-info'

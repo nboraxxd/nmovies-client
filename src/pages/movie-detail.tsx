@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import {
@@ -8,12 +7,10 @@ import {
 } from '@/lib/tanstack-query/use-movies'
 
 import { Heading } from '@/components/common'
-import { MediaCard } from '@/components/media-card'
-import { Banner, MediaInfo } from '@/components/media-detail'
+import { MediaCard, MediaCardSkeleton } from '@/components/media-card'
+import { Banner, BannerSkeleton, MediaInfo } from '@/components/media-detail'
 
 export default function MovieDetailPage() {
-  const [isTest, setIsTest] = useState(false)
-
   const { movieId } = useParams<{ movieId: string }>()
 
   const getMovieDetailQuery = useGetMovieDetailQuery(Number(movieId))
@@ -38,7 +35,8 @@ export default function MovieDetailPage() {
 
   return (
     <main>
-      {movieDetail ? (
+      {getMovieDetailQuery.isLoading || getMovieCreditsQuery.isLoading ? <BannerSkeleton /> : null}
+      {movieDetail && getMovieCreditsQuery.isSuccess ? (
         <Banner
           title={movieDetail.title}
           releaseDate={movieDetail.releaseDate}
@@ -56,8 +54,17 @@ export default function MovieDetailPage() {
 
       <div className="container mt-10 sm:px-6 lg:px-8">
         <MediaInfo key={movieId} />
+
         <section className="mt-10">
           <Heading>You may also like</Heading>
+          {getRecommendedMoviesQuery.isLoading ? (
+            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4 lg:grid-cols-5 xl:grid-cols-6">
+              {Array.from({ length: 12 }).map((_, index) => (
+                <MediaCardSkeleton key={index} />
+              ))}
+            </div>
+          ) : null}
+
           {recommendedMovies.length > 0 ? (
             <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4 lg:grid-cols-5 xl:grid-cols-6">
               {recommendedMovies.map((item) => (
@@ -72,14 +79,11 @@ export default function MovieDetailPage() {
                 />
               ))}
             </div>
-          ) : (
-            <p>No recommended movies</p>
-          )}
+          ) : null}
+          {getRecommendedMoviesQuery.isSuccess && recommendedMovies.length === 0 ? (
+            <p className="mt-8">Don't have any recommended movies or tv shows</p>
+          ) : null}
         </section>
-      </div>
-      <div>
-        <button onClick={() => setIsTest(!isTest)}>Test</button>
-        <div>{isTest ? Array.from({ length: 6 }).map((_, i) => <p key={i}>Test {i + 1}</p>) : null}</div>
       </div>
     </main>
   )

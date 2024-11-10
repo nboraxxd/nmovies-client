@@ -8,6 +8,7 @@ export const QUERY_KEY = {
 
   DISCOVER_TVS: 'discoverTvs',
   TV_DETAIL: 'tvDetail',
+  TV_AGGREGATE_CREDITS: 'tvAggregateCredits',
   RECOMMENDED_TVS: 'recommendedTvs',
 
   CHECK_FAVORITE_BY_MEDIA: 'checkFavoriteByMedia',

@@ -8,6 +8,7 @@ import { GenreType } from '@/lib/schemas/common-media.schema'
 import FavoriteButton from '@/components/media-detail/favorite-button'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { ImageWithLoading } from '@/components/common'
+import { Skeleton } from '@/components/ui/skeleton'
 
 interface Props {
   title: string
@@ -23,7 +24,7 @@ interface Props {
   certification: string | null
 }
 
-export default function Banner(props: Props) {
+function Banner(props: Props) {
   const {
     screenplays,
     directors,
@@ -56,7 +57,9 @@ export default function Banner(props: Props) {
       <div className="absolute inset-0 mx-auto flex max-w-screen-xl items-center justify-center gap-8 p-6 md:items-stretch lg:p-8">
         {/* Poster */}
         <div className="hidden shrink-0 md:block">
-          <img
+          <ImageWithLoading
+            width={414}
+            height={622}
             src={poster || placeholderPoster}
             alt={title}
             className="size-full rounded-lg object-contain shadow-lg"
@@ -116,3 +119,21 @@ export default function Banner(props: Props) {
     </div>
   )
 }
+
+function BannerSkeleton() {
+  return (
+    <div className="relative w-full bg-muted/30 pb-[100%] sm:pb-[72%] md:pb-[56%] lg:pb-[42%] xl:pb-[36%]">
+      <div className="absolute inset-0 mx-auto flex w-full max-w-screen-xl items-center justify-center gap-8 p-6 md:items-stretch lg:p-8">
+        <Skeleton className="hidden h-full md:block md:w-[344px] lg:w-72" />
+        <div className="w-full md:max-w-xl">
+          <Skeleton className="h-8 w-2/3" />
+          {Array.from({ length: 5 }).map((_, index) => (
+            <Skeleton key={index} className="mt-3 h-5 w-1/2" />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export { Banner, BannerSkeleton }

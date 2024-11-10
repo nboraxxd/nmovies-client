@@ -19,6 +19,13 @@ export function useGetTvDetailQuery(tvId: number) {
   })
 }
 
+export function useGetTvAggregateCreditsQuery(tvId: number) {
+  return useQuery({
+    queryFn: () => tvsApi.getTvAggregateCredits(tvId),
+    queryKey: [QUERY_KEY.TV_AGGREGATE_CREDITS, tvId],
+  })
+}
+
 export function useGetRecommendedTvsQuery(params: TvIdParamsType & PageQueryType) {
   return useQuery({
     queryFn: () => tvsApi.getRecommendedTvs(params),

@@ -333,6 +333,7 @@ export const tmdbMovieCreditsResponseSchema = z.object({
   cast: z.array(tmdbMovieCastSchema),
   crew: z.array(tmdbMovieCrewSchema),
 })
+
 export type TMDBMovieCreditsResponseType = z.TypeOf<typeof tmdbMovieCreditsResponseSchema>
 
 export const tmdbRecommendedMoviesResponseSchema = z.object({
@@ -422,13 +423,17 @@ export const tmdbTvDetailResponseSchema = tmdbTvResultSchema.omit({ media_type: 
       })
     ),
   }),
-  aggregate_credits: z.object({
-    cast: z.array(tmdbTvCastSchema),
-    crew: z.array(tmdbTvCrewSchema),
-  }),
 })
 
 export type TMDBTvDetailResponseType = z.TypeOf<typeof tmdbTvDetailResponseSchema>
+
+export const tmdbTVAggregateCreditsResponseSchema = z.object({
+  id: z.number(),
+  cast: z.array(tmdbTvCastSchema),
+  crew: z.array(tmdbTvCrewSchema),
+})
+
+export type TMDBTvAggregateCreditsResponseType = z.TypeOf<typeof tmdbTVAggregateCreditsResponseSchema>
 
 export const tmdbRecommendedTvsResponseSchema = tmdbRecommendedMoviesResponseSchema
 

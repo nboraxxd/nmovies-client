@@ -59,3 +59,18 @@ export const PROFILE_NAV = [
     icon: MessageSquareMoreIcon,
   },
 ] as const
+
+export const MOVIE_DETAIL_INFO = [
+  {
+    title: 'Status',
+    key: 'status',
+  },
+  {
+    title: 'Budget',
+    key: 'budget',
+  },
+  {
+    title: 'Revenue',
+    key: 'revenue',
+  },
+] as const

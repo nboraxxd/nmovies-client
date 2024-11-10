@@ -4,6 +4,7 @@ import {
   DiscoverTvsResponseType,
   RecommendedTvsResponseType,
   TopRatedTvsResponseType,
+  TvAggregateCreditsResponseType,
   TvDetailResponseType,
   TvIdParamsType,
 } from '@/lib/schemas/tv.schema'
@@ -22,6 +23,10 @@ const tvsApi = {
 
   getTvDetail: async (tvId: number) => {
     return http.get<TvDetailResponseType>(`${TVS_PREFIX}/${tvId}`)
+  },
+
+  getTvAggregateCredits: async (tvId: number) => {
+    return http.get<TvAggregateCreditsResponseType>(`${TVS_PREFIX}/${tvId}/aggregate-credits`)
   },
 
   getRecommendedTvs: async (params: TvIdParamsType & PageQueryType) => {
