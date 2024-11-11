@@ -15,6 +15,7 @@ export const AUTH_API_URL = '/auth'
 export const REGISTER_API_URL = `${AUTH_API_URL}/register`
 export const LOGIN_API_URL = `${AUTH_API_URL}/login`
 export const VERIFY_EMAIL_API_URL = `${AUTH_API_URL}/verify-email`
+export const RESET_PASSWORD_API_URL = `${AUTH_API_URL}/reset-password`
 export const REFRESH_TOKEN_API_URL = `${AUTH_API_URL}/refresh-token`
 export const LOGOUT_API_URL = `${AUTH_API_URL}/logout`
 

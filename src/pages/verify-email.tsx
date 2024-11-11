@@ -29,7 +29,6 @@ export default function VerifyEmailPage() {
           const response = await mutateAsync({ emailVerifyToken })
 
           toast.success(response.message)
-          navigate(PATH.HOMEPAGE)
         } catch (error) {
           if (isAxiosUnauthorizedError<UnauthorizedError>(error)) {
             toast.error(
@@ -38,11 +37,12 @@ export default function VerifyEmailPage() {
                 : error.response?.data.message
             )
           }
+        } finally {
+          navigate(PATH.HOMEPAGE)
+          timeout = setTimeout(() => {
+            verifyEmailRef.current = null
+          }, 1000)
         }
-
-        timeout = setTimeout(() => {
-          verifyEmailRef.current = null
-        }, 1000)
       })()
     } else {
       navigate(PATH.HOMEPAGE)

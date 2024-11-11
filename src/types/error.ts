@@ -1,6 +1,6 @@
 import { ZodIssueCode } from 'zod'
 
-type ValidationLocation = 'body' | 'params' | 'query' | 'headers'
+export type ValidationLocation = 'body' | 'params' | 'query' | 'headers' | 'file'
 
 type ErrorsType = { code: ZodIssueCode; message: string; path: string; location: ValidationLocation }[]
 
@@ -11,9 +11,6 @@ export type EntityError = {
 
 export type UnauthorizedError = {
   message: string
-  errorInfo: {
-    code: string
-    message: string
-    name: string
-  }
+  errorInfo?: Record<string, any>
+  location?: ValidationLocation
 }

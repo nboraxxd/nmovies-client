@@ -59,7 +59,6 @@ function UserButton() {
     if (logoutMutation.isPending || !refreshToken) return
 
     const response = await logoutMutation.mutateAsync({ refreshToken })
-
     toast.success(response.message)
   }
 
