@@ -4,6 +4,7 @@ import { MediaType } from '@/lib/schemas/common-media.schema'
 import { useGetGenresMovieQuery } from '@/lib/tanstack-query/use-movies'
 
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function GenresSelect({ type }: { type: MediaType }) {
   return (
@@ -18,7 +19,20 @@ function GenresMovieSelect() {
   const genresMovieQuery = useGetGenresMovieQuery()
 
   if (genresMovieQuery.isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className="mt-3 flex flex-col items-center justify-center gap-3 overflow-hidden">
+        <div className="flex gap-3">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <Skeleton key={index} className="h-9 w-20" />
+          ))}
+        </div>
+        <div className="flex gap-3">
+          {Array.from({ length: 7 }).map((_, index) => (
+            <Skeleton key={index} className="h-9 w-20" />
+          ))}
+        </div>
+      </div>
+    )
   }
 
   const genresTop = genresMovieQuery.isSuccess
@@ -34,7 +48,7 @@ function GenresMovieSelect() {
     : undefined
 
   return genresMovieQuery.isSuccess && genresTop && genresBottom ? (
-    <ToggleGroup type="multiple" className="flex-col items-start overflow-x-auto">
+    <ToggleGroup type="multiple" className="mt-3 flex-col items-start overflow-x-auto">
       <div className="mx-auto flex w-fit flex-col gap-3">
         <div className="flex w-full gap-3">
           {genresTop.map(({ id, name }) => (

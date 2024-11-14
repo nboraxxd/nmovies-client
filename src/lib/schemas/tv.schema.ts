@@ -1,7 +1,6 @@
 import z from 'zod'
 
 import {
-  discoverySortBySchema,
   genreSchema,
   productionCompanySchema,
   productionCountrySchema,
@@ -150,6 +149,28 @@ export const tvDetailDataSchema = tvDataSchema.omit({ mediaType: true, genreIds:
 export type TvDetailDataType = z.TypeOf<typeof tvDetailDataSchema>
 
 /* Discover tv schema */
+export const tvSortOptionsSchema = z.enum(
+  [
+    'first_air_date.asc',
+    'first_air_date.desc',
+    'name.asc',
+    'name.desc',
+    'original_name.asc',
+    'original_name.desc',
+    'popularity.asc',
+    'popularity.desc',
+    'vote_average.asc',
+    'vote_average.desc',
+    'vote_count.asc',
+    'vote_count.desc',
+  ],
+  {
+    message: 'Invalid sort by value',
+  }
+)
+
+export type TvSortOptionsType = z.TypeOf<typeof tvSortOptionsSchema>
+
 export const discoverTvsQuerySchema = z
   .object({
     includeAdult: z
@@ -157,12 +178,12 @@ export const discoverTvsQuerySchema = z
       .refine((value) => value === 0 || value === 1, { message: 'includeAdult must be 0 (false) or 1 (true)' })
       .optional(),
     page: queryPageSchema.optional(),
-    sortBy: discoverySortBySchema.optional(),
+    sortBy: tvSortOptionsSchema.optional(),
     voteAverageGte: z.coerce.number().optional(),
     voteAverageLte: z.coerce.number().optional(),
     withGenres: z
       .string()
-      .regex(/^(\d+)(,\d+)*$/)
+      .regex(/^(\d+)(,\d+)*$/, { message: 'withGenres must be a list of genre IDs separated by commas' })
       .optional(),
   })
   .strict({ message: 'Additional properties not allowed' })

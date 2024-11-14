@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
 import moviesApi from '@/apis/movies.api'
+import { QUERY_KEY } from '@/constants/tanstack-key'
 import { PageQueryType } from '@/lib/schemas/common-media.schema'
 import { DiscoverMoviesQueryType, MovieIdParamsType } from '@/lib/schemas/movies.schema'
-import { QUERY_KEY } from '@/constants/tanstack-key'
 
 export function useGetDiscoverMoviesQuery(query?: DiscoverMoviesQueryType) {
   return useQuery({
