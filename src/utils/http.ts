@@ -36,11 +36,10 @@ class Http {
 
       const { accessToken, refreshToken } = res.data
 
-      setAccessTokenToLocalStorage(accessToken)
-      setRefreshTokenToLocalStorage(refreshToken)
-
       this.accessToken = accessToken
       this.refreshToken = refreshToken
+      setAccessTokenToLocalStorage(accessToken)
+      setRefreshTokenToLocalStorage(refreshToken)
 
       return accessToken
     } catch (error) {
@@ -117,11 +116,12 @@ class Http {
                     this.refreshTokenRequest = null
                   }, 10000)
                 })
-            return this.refreshTokenRequest.then((accessToken) => {
-              return this.instance({
-                ...config,
-                headers: { ...config?.headers, authorization: `Bearer ${accessToken}` },
-              })
+
+            const accessToken = await this.refreshTokenRequest
+
+            return this.instance({
+              ...config,
+              headers: { ...config?.headers, authorization: `Bearer ${accessToken}` },
             })
           }
 

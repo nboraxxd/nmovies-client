@@ -9,7 +9,7 @@ interface Props extends React.ImgHTMLAttributes<HTMLImageElement> {
 }
 
 export default function ImageWithLoading({ src, width, height, className, ...rest }: Props) {
-  const [currentSrc, setCurrentSrc] = useState(`https://placehold.co/${width}x${height}?text=Loading`)
+  const [currentSrc, setCurrentSrc] = useState(`https://placehold.co/${width}x${height}/32343C/71717a?text=Loading`)
 
   useEffect(() => {
     const img = new Image()
@@ -21,7 +21,7 @@ export default function ImageWithLoading({ src, width, height, className, ...res
       return
     }
 
-    setCurrentSrc(`https://placehold.co/${width}x${height}?text=No Image`)
+    setCurrentSrc(`https://placehold.co/${width}x${height}/32343C/FFFFFF?text=No Image`)
 
     return () => {
       img.onload = null

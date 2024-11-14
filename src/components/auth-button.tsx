@@ -39,7 +39,7 @@ export default function AuthButton() {
   return isAuth ? (
     <UserButton />
   ) : (
-    <Button className="w-10 gap-1.5 max-md:p-0 md:w-auto" asChild>
+    <Button className="ml-auto w-10 gap-1.5 max-md:p-0 md:w-auto" asChild>
       <Link to={{ pathname: PATH.LOGIN, search: pathname !== PATH.HOMEPAGE ? next : undefined }}>
         <CircleUserRoundIcon className="size-5 md:hidden" />
         <LogInIcon className="hidden size-5 md:block" />
@@ -62,11 +62,11 @@ function UserButton() {
     toast.success(response.message)
   }
 
-  if (profileQuery.isLoading) return <Skeleton className="size-10" />
+  if (profileQuery.isLoading) return <Skeleton className="ml-auto size-10" />
 
   return profileQuery.isSuccess ? (
     <DropdownMenu>
-      <DropdownMenuTrigger className="cursor-pointer" asChild>
+      <DropdownMenuTrigger className="ml-auto cursor-pointer" asChild>
         <Button variant="ghost" size="icon">
           <UserAvatar avatar={profileQuery.data.data.avatar} name={profileQuery.data.data.name} variant="square" />
         </Button>

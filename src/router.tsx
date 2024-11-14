@@ -13,6 +13,7 @@ import LoggedInLayout from '@/layouts/logged-in'
 import LoggedOutLayout from '@/layouts/logged-out'
 import VerifyEmailPage from '@/pages/verify-email'
 import TvDetailPage from '@/pages/tv-detail'
+import MoviesPage from '@/pages/movies'
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Homepage />,
+      },
+      {
+        path: PATH.MOVIES,
+        element: <MoviesPage />,
       },
       {
         path: PATH.MOVIE_DETAIL,

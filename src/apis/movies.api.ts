@@ -2,6 +2,7 @@ import http from '@/utils/http'
 import {
   DiscoverMoviesQueryType,
   DiscoverMoviesResponseType,
+  GenresMovieResponseType,
   MovieCreditsResponseType,
   MovieDetailResponseType,
   MovieIdParamsType,
@@ -32,6 +33,10 @@ const moviesApi = {
   getRecommendedMovies: async (params: MovieIdParamsType & PageQueryType) => {
     const { movieId, page } = params
     return http.get<RecommendedMoviesResponseType>(`${MOVIES_PREFIX}/${movieId}/recommended`, { params: { page } })
+  },
+
+  getGenresMovie: async () => {
+    return http.get<GenresMovieResponseType>(`${MOVIES_PREFIX}/genres`)
   },
 }
 

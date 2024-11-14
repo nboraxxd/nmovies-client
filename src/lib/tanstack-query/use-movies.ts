@@ -32,3 +32,10 @@ export function useGetRecommendedMoviesQuery(params: MovieIdParamsType & PageQue
     queryKey: [QUERY_KEY.RECOMMENDED_MOVIES, params],
   })
 }
+
+export function useGetGenresMovieQuery() {
+  return useQuery({
+    queryFn: moviesApi.getGenresMovie,
+    queryKey: [QUERY_KEY.GENRES_MOVIE],
+  })
+}

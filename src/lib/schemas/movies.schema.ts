@@ -171,3 +171,11 @@ export const recommendedMoviesResponseSchema = z.object({
 })
 
 export type RecommendedMoviesResponseType = z.TypeOf<typeof recommendedMoviesResponseSchema>
+
+/* Genres movie schema */
+export const genresMovieResponseSchema = z.object({
+  message: z.string(),
+  data: z.array(genreSchema),
+})
+
+export type GenresMovieResponseType = z.TypeOf<typeof genresMovieResponseSchema>

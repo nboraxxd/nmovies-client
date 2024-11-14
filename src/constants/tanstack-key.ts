@@ -5,6 +5,7 @@ export const QUERY_KEY = {
   MOVIE_DETAIL: 'movieDetail',
   MOVIE_CREDITS: 'movieCredits',
   RECOMMENDED_MOVIES: 'recommendedMovies',
+  GENRES_MOVIE: 'genresMovie',
 
   DISCOVER_TVS: 'discoverTvs',
   TV_DETAIL: 'tvDetail',
