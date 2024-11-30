@@ -4,10 +4,10 @@ import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 import { cn } from '@/utils'
 
+import { Skeleton } from '@/components/ui/skeleton'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
 
 interface Props {
   id: number

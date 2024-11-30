@@ -1,15 +1,15 @@
+import { useMediaQuery } from 'usehooks-ts'
 import { useParams } from 'react-router-dom'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 
 import { useGetMovieCreditsQuery } from '@/lib/tanstack-query/use-movies'
+import { useGetTvAggregateCreditsQuery } from '@/lib/tanstack-query/use-tvs'
 
 import { Heading } from '@/components/common'
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
 import { CastCard, CastCardSkeleton } from '@/components/media-detail'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
-import { useGetTvAggregateCreditsQuery } from '@/lib/tanstack-query/use-tvs'
-import { useMediaQuery } from 'usehooks-ts'
-import { Skeleton } from '@/components/ui/skeleton'
 
 interface Props {
   isExtended: boolean

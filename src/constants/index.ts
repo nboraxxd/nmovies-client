@@ -133,19 +133,19 @@ export const MOVIE_SORT_OPTIONS = [
   },
   {
     value: 'vote_count.desc',
-    name: 'Votes Descending',
+    name: 'Votes Count Descending',
   },
   {
     value: 'vote_count.asc',
-    name: 'Votes Ascending',
+    name: 'Votes Count Ascending',
   },
   {
     value: 'original_title.asc',
-    name: 'Title (A-Z)',
+    name: 'Original Title (A-Z)',
   },
   {
     value: 'original_title.desc',
-    name: 'Title (Z-A)',
+    name: 'Original Title (Z-A)',
   },
 ] as const
 
@@ -186,11 +186,11 @@ export const TV_SORT_OPTIONS = [
   },
   {
     value: 'vote_count.desc',
-    name: 'Votes Descending',
+    name: 'Votes Count Descending',
   },
   {
     value: 'vote_count.asc',
-    name: 'Votes Ascending',
+    name: 'Votes Count Ascending',
   },
   {
     value: 'original_name.asc',

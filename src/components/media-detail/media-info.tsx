@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
+import { MOVIE_DETAIL_INFO } from '@/constants'
 import { cn, currencyFormatter } from '@/utils'
 import { MediaType } from '@/lib/schemas/common-media.schema'
+import { useGetTvDetailQuery } from '@/lib/tanstack-query/use-tvs'
 import { useGetMovieDetailQuery } from '@/lib/tanstack-query/use-movies'
 
-import { MovieCastList, TvCastList } from '@/components/media-detail'
 import { Heading } from '@/components/common'
-import { MOVIE_DETAIL_INFO } from '@/constants'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useGetTvDetailQuery } from '@/lib/tanstack-query/use-tvs'
+import { MovieCastList, TvCastList } from '@/components/media-detail'
 
 export default function MediaInfo() {
   const [isExtended, setIsExtended] = useState(false)

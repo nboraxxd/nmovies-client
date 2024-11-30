@@ -29,7 +29,6 @@ export default function RegisterForm() {
   const registerMutation = useRegister()
 
   async function onValid(values: RegisterBodyType) {
-    console.log('🔥 ~ onValid ~ values:', values)
     if (registerMutation.isPending) return
 
     try {
@@ -50,7 +49,7 @@ export default function RegisterForm() {
 
   return (
     <Form {...form}>
-      <form className="w-full space-y-6" noValidate onSubmit={form.handleSubmit(onValid, (err) => console.log(err))}>
+      <form className="w-full space-y-6" noValidate onSubmit={form.handleSubmit(onValid)}>
         <FormField
           control={form.control}
           name="name"

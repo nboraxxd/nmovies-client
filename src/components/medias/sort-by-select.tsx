@@ -1,19 +1,20 @@
-import { MOVIE_SORT_LIST, MOVIE_SORT_OPTIONS } from '@/constants'
+import queryString from 'query-string'
+import { useNavigate } from 'react-router-dom'
+
+import { MOVIE_SORT_OPTIONS } from '@/constants'
+import useFilteredMediaParams from '@/hooks/useFilteredMediaParams'
+import { DiscoverMoviesQueryType, MovieSortOptionsType } from '@/lib/schemas/movies.schema'
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import useFilteredMediaParams from '@/hooks/useQueryParamsFiltered'
-import { useNavigate } from 'react-router-dom'
-import { MovieSort } from '@/types'
-import queryString from 'query-string'
 
 export default function SortBySelect() {
   const navigate = useNavigate()
 
-  const filteredMediaParams = useFilteredMediaParams(MOVIE_SORT_LIST)
+  const filteredMediaParams = useFilteredMediaParams<DiscoverMoviesQueryType>()
 
   return (
     <Select
-      onValueChange={(ev: MovieSort) => {
+      onValueChange={(ev: MovieSortOptionsType) => {
         navigate({ search: queryString.stringify({ ...filteredMediaParams, sortBy: ev }) })
       }}
       value={filteredMediaParams?.sortBy}

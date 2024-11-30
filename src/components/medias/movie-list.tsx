@@ -1,12 +1,13 @@
-import { MediaCard, MediaCardSkeleton } from '@/components/media-card'
-import { MOVIE_SORT_LIST } from '@/constants'
-import useFilteredMediaParams from '@/hooks/useQueryParamsFiltered'
+import useFilteredMediaParams from '@/hooks/useFilteredMediaParams'
+import { DiscoverMoviesQueryType } from '@/lib/schemas/movies.schema'
 import { useGetDiscoverMoviesQuery } from '@/lib/tanstack-query/use-movies'
 
-export default function MovieList() {
-  const filteredMediaParams = useFilteredMediaParams(MOVIE_SORT_LIST)
+import { MediaCard, MediaCardSkeleton } from '@/components/media-card'
 
-  const discoverMoviesQuery = useGetDiscoverMoviesQuery({ sortBy: filteredMediaParams?.sortBy })
+export default function MovieList() {
+  const filteredMediaParams = useFilteredMediaParams<DiscoverMoviesQueryType>()
+
+  const discoverMoviesQuery = useGetDiscoverMoviesQuery(filteredMediaParams)
 
   if (discoverMoviesQuery.isLoading)
     return (

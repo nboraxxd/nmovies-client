@@ -1,14 +1,15 @@
 import { PlayIcon } from 'lucide-react'
 
+import { useAuthStore } from '@/lib/stores/auth-store'
+import { GenreType } from '@/lib/schemas/common-media.schema'
+
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
+import { ImageWithLoading } from '@/components/common'
 import { CircularProgressBar } from '@/components/icons'
+import FavoriteButton from '@/components/media-detail/favorite-button'
 import placeholderBackdrop from '/placeholder-backdrop.svg'
 import placeholderPoster from '/placeholder-poster.svg'
-import { GenreType } from '@/lib/schemas/common-media.schema'
-import FavoriteButton from '@/components/media-detail/favorite-button'
-import { useAuthStore } from '@/lib/stores/auth-store'
-import { ImageWithLoading } from '@/components/common'
-import { Skeleton } from '@/components/ui/skeleton'
 
 interface Props {
   title: string

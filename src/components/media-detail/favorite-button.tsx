@@ -1,4 +1,5 @@
 import { toast } from 'sonner'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { HeartIcon, LoaderCircleIcon } from 'lucide-react'
 
@@ -10,7 +11,6 @@ import {
 } from '@/lib/tanstack-query/use-favorites'
 
 import { Button } from '@/components/ui/button'
-import { useEffect, useState } from 'react'
 
 interface Props {
   mediaTitle: string
