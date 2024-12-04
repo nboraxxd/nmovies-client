@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import queryString from 'query-string'
 
 import { separateGenres } from '@/utils'
-import useFilteredMediaParams from '@/hooks/useFilteredMediaParams'
+import useFilteredMediaParams from '@/hooks/use-filtered-media-params'
 import { DiscoverMoviesQueryType } from '@/lib/schemas/movies.schema'
 import { useGetGenresMovieQuery } from '@/lib/tanstack-query/use-movies'
 
@@ -68,6 +68,7 @@ function ToggleItem(props: { id: string; name: string; filteredMediaParams: Disc
           search: queryString.stringify(
             {
               ...filteredMediaParams,
+              page: undefined,
               withGenres:
                 filteredMediaParams.withGenres && filteredMediaParams.withGenres.includes(id)
                   ? filteredMediaParams.withGenres

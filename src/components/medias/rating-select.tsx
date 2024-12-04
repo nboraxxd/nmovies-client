@@ -2,7 +2,7 @@ import queryString from 'query-string'
 import { useNavigate } from 'react-router-dom'
 
 import { RATING_OPTIONS } from '@/constants'
-import useFilteredMediaParams from '@/hooks/useFilteredMediaParams'
+import useFilteredMediaParams from '@/hooks/use-filtered-media-params'
 import { DiscoverMoviesQueryType } from '@/lib/schemas/movies.schema'
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -19,7 +19,9 @@ export default function RatingSelect() {
     <Select
       onValueChange={(ev: (typeof RATING_OPTIONS)[number]['value']) => {
         const [voteAverageGte, voteAverageLte] = ev.split('-')
-        navigate({ search: queryString.stringify({ ...filteredMediaParams, voteAverageGte, voteAverageLte }) })
+        navigate({
+          search: queryString.stringify({ ...filteredMediaParams, page: undefined, voteAverageGte, voteAverageLte }),
+        })
       }}
       value={
         filteredMediaParams.voteAverageGte &&

@@ -2,7 +2,7 @@ import queryString from 'query-string'
 import { useNavigate } from 'react-router-dom'
 
 import { MOVIE_SORT_OPTIONS } from '@/constants'
-import useFilteredMediaParams from '@/hooks/useFilteredMediaParams'
+import useFilteredMediaParams from '@/hooks/use-filtered-media-params'
 import { DiscoverMoviesQueryType, MovieSortOptionsType } from '@/lib/schemas/movies.schema'
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'

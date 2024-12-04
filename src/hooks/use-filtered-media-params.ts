@@ -22,6 +22,7 @@ export default function useFilteredMediaParams<T>() {
         typeof queryParams.withGenres === 'string' && /^(\d+)(,\d+)*$/.test(queryParams.withGenres)
           ? queryParams.withGenres
           : undefined,
+      page: Number(queryParams.page) ? Number(queryParams.page) : undefined,
     },
     isUndefined
   )
