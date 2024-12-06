@@ -14,6 +14,7 @@ import LoggedOutLayout from '@/layouts/logged-out'
 import VerifyEmailPage from '@/pages/verify-email'
 import TvDetailPage from '@/pages/tv-detail'
 import MoviesPage from '@/pages/movies'
+import TvsPage from '@/pages/tvs'
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
       {
         path: PATH.MOVIES,
         element: <MoviesPage />,
+      },
+      {
+        path: PATH.TVS,
+        element: <TvsPage />,
       },
       {
         path: PATH.MOVIE_DETAIL,

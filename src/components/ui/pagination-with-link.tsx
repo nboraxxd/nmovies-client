@@ -1,6 +1,11 @@
 'use client'
 
+import queryString from 'query-string'
 import { type ReactNode, useCallback } from 'react'
+
+import { DiscoverMoviesQueryType } from '@/lib/schemas/movies.schema'
+import useFilteredMediaParams from '@/hooks/use-filtered-media-params'
+
 import {
   Pagination,
   PaginationContent,
@@ -9,11 +14,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from './pagination'
-
-import useFilteredMediaParams from '@/hooks/use-filtered-media-params'
-import { DiscoverMoviesQueryType } from '@/lib/schemas/movies.schema'
-import queryString from 'query-string'
+} from '@/components/ui/pagination'
 
 export interface PaginationWithLinksProps {
   totalPage: number
@@ -73,7 +74,7 @@ export function PaginationWithLinks({ totalPage, page, pageSearchParam }: Pagina
       for (let i = start; i <= end; i++) {
         items.push(
           <PaginationItem key={i} className="hidden sm:list-item">
-            <PaginationLink to={{ search: buildSearchParams(i) }} isActive={page === i}>
+            <PaginationLink to={{ search: buildSearchParams(i) }} preventScrollReset isActive={page === i}>
               {i}
             </PaginationLink>
           </PaginationItem>

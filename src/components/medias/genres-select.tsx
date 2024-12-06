@@ -3,6 +3,8 @@ import queryString from 'query-string'
 
 import { separateGenres } from '@/utils'
 import useFilteredMediaParams from '@/hooks/use-filtered-media-params'
+import { DiscoverTvsQueryType } from '@/lib/schemas/tv.schema'
+import { useGetGenresTvQuery } from '@/lib/tanstack-query/use-tvs'
 import { DiscoverMoviesQueryType } from '@/lib/schemas/movies.schema'
 import { useGetGenresMovieQuery } from '@/lib/tanstack-query/use-movies'
 
@@ -16,20 +18,7 @@ function GenresMovieSelect() {
   const { genresTop, genresBottom } = separateGenres(genresMovieQuery.data?.data)
 
   if (genresMovieQuery.isLoading) {
-    return (
-      <div className="mt-3 flex flex-col items-center justify-center gap-3 overflow-hidden">
-        <div className="flex gap-3">
-          {Array.from({ length: 8 }).map((_, index) => (
-            <Skeleton key={index} className="h-9 w-20" />
-          ))}
-        </div>
-        <div className="flex gap-3">
-          {Array.from({ length: 7 }).map((_, index) => (
-            <Skeleton key={index} className="h-9 w-20" />
-          ))}
-        </div>
-      </div>
-    )
+    return <GenresLoading />
   }
 
   return genresTop && genresBottom ? (
@@ -55,10 +44,59 @@ function GenresMovieSelect() {
 }
 
 function GenresTvSelect() {
-  return <div>Genres tv Select</div>
+  const genresMovieQuery = useGetGenresTvQuery()
+  const filteredMediaParams = useFilteredMediaParams<DiscoverTvsQueryType>()
+
+  const { genresTop, genresBottom } = separateGenres(genresMovieQuery.data?.data)
+
+  if (genresMovieQuery.isLoading) {
+    return <GenresLoading />
+  }
+
+  return genresTop && genresBottom ? (
+    <ToggleGroup
+      type="multiple"
+      value={filteredMediaParams.withGenres ? filteredMediaParams.withGenres?.split(',') : []}
+      className="mt-3 flex-col items-start overflow-x-auto"
+    >
+      <div className="mx-auto flex w-fit flex-col gap-3">
+        <div className="flex w-full gap-3">
+          {genresTop.map(({ id, name }) => (
+            <ToggleItem key={id} id={id.toString()} name={name} filteredMediaParams={filteredMediaParams} />
+          ))}
+        </div>
+        <div className="flex w-full justify-center gap-3">
+          {genresBottom.map(({ id, name }) => (
+            <ToggleItem key={id} id={id.toString()} name={name} filteredMediaParams={filteredMediaParams} />
+          ))}
+        </div>
+      </div>
+    </ToggleGroup>
+  ) : null
 }
 
-function ToggleItem(props: { id: string; name: string; filteredMediaParams: DiscoverMoviesQueryType }) {
+function GenresLoading() {
+  return (
+    <div className="mt-3 flex flex-col items-center justify-center gap-3 overflow-hidden">
+      <div className="flex gap-3">
+        {Array.from({ length: 8 }).map((_, index) => (
+          <Skeleton key={index} className="h-9 w-20" />
+        ))}
+      </div>
+      <div className="flex gap-3">
+        {Array.from({ length: 7 }).map((_, index) => (
+          <Skeleton key={index} className="h-9 w-20" />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function ToggleItem(props: {
+  id: string
+  name: string
+  filteredMediaParams: DiscoverMoviesQueryType | DiscoverTvsQueryType
+}) {
   const { id, name, filteredMediaParams } = props
 
   return (

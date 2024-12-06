@@ -1,14 +1,15 @@
 import http from '@/utils/http'
+import { PageQueryType } from '@/lib/schemas/common-media.schema'
 import {
   DiscoverTvsQueryType,
   DiscoverTvsResponseType,
+  GenresTvResponseType,
   RecommendedTvsResponseType,
   TopRatedTvsResponseType,
   TvAggregateCreditsResponseType,
   TvDetailResponseType,
   TvIdParamsType,
 } from '@/lib/schemas/tv.schema'
-import { PageQueryType } from '@/lib/schemas/common-media.schema'
 
 const TVS_PREFIX = '/tvs'
 
@@ -32,6 +33,10 @@ const tvsApi = {
   getRecommendedTvs: async (params: TvIdParamsType & PageQueryType) => {
     const { tvId, page } = params
     return http.get<RecommendedTvsResponseType>(`${TVS_PREFIX}/${tvId}/recommended`, { params: { page } })
+  },
+
+  getGenresTv: async () => {
+    return http.get<GenresTvResponseType>(`${TVS_PREFIX}/genres`)
   },
 }
 

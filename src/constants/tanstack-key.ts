@@ -11,6 +11,7 @@ export const QUERY_KEY = {
   TV_DETAIL: 'tvDetail',
   TV_AGGREGATE_CREDITS: 'tvAggregateCredits',
   RECOMMENDED_TVS: 'recommendedTvs',
+  GENRES_TV: 'genresTv',
 
   CHECK_FAVORITE_BY_MEDIA: 'checkFavoriteByMedia',
 } as const
