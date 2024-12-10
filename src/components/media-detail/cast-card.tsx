@@ -21,7 +21,7 @@ function CastCard({ character, id, name, avatarUrl }: Props) {
 
   return (
     <Card key={id}>
-      <Link to="/">
+      <Link to={`/people/${id}`}>
         <Avatar asChild className="size-full rounded-none">
           <AspectRatio ratio={4 / 5}>
             {avatarUrl ? (

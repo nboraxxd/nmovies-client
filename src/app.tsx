@@ -3,9 +3,9 @@ import { RouterProvider } from 'react-router-dom'
 import { router } from '@/router'
 
 import { Toaster } from '@/components/ui/sonner'
-import { TanstackQueryProvider } from '@/components/provider'
-import CallToVerify from '@/components/call-to-verify'
 import AuthCleanup from '@/components/auth-cleanup'
+import CallToVerify from '@/components/call-to-verify'
+import { TanstackQueryProvider } from '@/components/provider'
 import '@/globals.css'
 
 export default function App() {

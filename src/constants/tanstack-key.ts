@@ -13,5 +13,8 @@ export const QUERY_KEY = {
   RECOMMENDED_TVS: 'recommendedTvs',
   GENRES_TV: 'genresTv',
 
+  PERSON_DETAIL: 'personDetail',
+  PERSON_COMBINED_CREDITS: 'personCombinedCredits',
+
   CHECK_FAVORITE_BY_MEDIA: 'checkFavoriteByMedia',
 } as const
