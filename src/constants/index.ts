@@ -56,8 +56,8 @@ export const PROFILE_NAV = [
     icon: FolderHeartIcon,
   },
   {
-    label: 'Comments',
-    to: '/profile/comments',
+    label: 'Reviews',
+    to: '/profile/reviews',
     icon: MessageSquareMoreIcon,
   },
 ] as const

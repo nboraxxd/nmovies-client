@@ -1,6 +1,7 @@
-import AuthButton from '@/components/auth-button'
-import { PATH } from '@/constants/path'
 import { Link } from 'react-router-dom'
+
+import { PATH } from '@/constants/path'
+import { AuthButton } from '@/components/auth-button'
 
 export default function Header() {
   return (

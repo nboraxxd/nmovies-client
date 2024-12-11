@@ -31,7 +31,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-export default function AuthButton() {
+function AuthButton() {
   const isAuth = useAuthStore((state) => state.isAuth)
   const { pathname } = useLocation()
   const next = queryString.stringify({ next: pathname })
@@ -95,9 +95,9 @@ function UserButton() {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link to="/profile/comments" className="group cursor-pointer gap-2 transition-colors focus:text-foreground">
+            <Link to="/profile/reviews" className="group cursor-pointer gap-2 transition-colors focus:text-foreground">
               <MessageSquareMoreIcon className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-              My comments
+              My reviews
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
@@ -117,9 +117,14 @@ function UserButton() {
   ) : null
 }
 
-function UserAvatar(props: { name: string; avatar: string | null; variant: 'square' | 'round' }) {
-  const { name, avatar, variant } = props
+interface UserAvatarProps {
+  name: string
+  avatar: string | null
+  className?: string
+  variant?: 'square' | 'round'
+}
 
+export function UserAvatar({ name, avatar, className, variant }: UserAvatarProps) {
   const variantOptions = cva('', {
     variants: {
       variant: {
@@ -130,7 +135,7 @@ function UserAvatar(props: { name: string; avatar: string | null; variant: 'squa
   })
 
   return (
-    <Avatar className={cn(variantOptions({ variant }))}>
+    <Avatar className={cn(className, variantOptions({ variant }))}>
       {avatar ? (
         <img src={avatar} alt={name} className="relative flex size-full shrink-0 object-cover" />
       ) : (
@@ -141,3 +146,5 @@ function UserAvatar(props: { name: string; avatar: string | null; variant: 'squa
     </Avatar>
   )
 }
+
+export { AuthButton, UserButton }
