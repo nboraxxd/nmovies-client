@@ -8,8 +8,8 @@ export const userDocumentResponseSchema = z.object({
   email: z.string(),
   avatar: z.string().nullable(),
   isVerified: z.boolean(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
 })
 
 export type UserDocumentResponseType = z.TypeOf<typeof userDocumentResponseSchema>

@@ -9,7 +9,7 @@ const favoriteDocumentSchema = z.object({
   mediaType: z.enum(['movie', 'tv']),
   mediaPoster: z.string().nullable(),
   mediaReleaseDate: z.string(),
-  createdAt: z.date(),
+  createdAt: z.string(),
 })
 
 export type FavoriteDocumentType = z.TypeOf<typeof favoriteDocumentSchema>

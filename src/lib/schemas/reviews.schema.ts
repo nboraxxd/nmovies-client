@@ -12,8 +12,8 @@ const reviewDocumentSchema = z.object({
   mediaPoster: z.string().nullable(),
   mediaReleaseDate: z.string(),
   content: z.string().min(1).max(1000),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
 })
 
 export type ReviewDocumentType = z.TypeOf<typeof reviewDocumentSchema>
