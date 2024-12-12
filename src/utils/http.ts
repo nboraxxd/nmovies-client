@@ -93,7 +93,8 @@ class Http {
       async (error: AxiosError) => {
         if (!(error.status === HttpStatusCode.Unauthorized) && !(error.status === HttpStatusCode.UnprocessableEntity)) {
           const data: any | undefined = error.response?.data
-          const message = data?.errorInfo.map((item: any) => item.message)?.join(', ') || data?.message || error.message
+          const message =
+            data?.errorInfo?.map((item: any) => item.message)?.join(', ') || data?.message || error.message
           toast.error(message)
         }
 
