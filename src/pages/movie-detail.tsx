@@ -9,9 +9,8 @@ import {
 import { Heading } from '@/components/common'
 import { MediaCard, MediaCardSkeleton } from '@/components/media-card'
 import { Banner, BannerSkeleton, MediaInfo } from '@/components/media-detail'
-import ReviewForm from '@/components/form/review-form'
-import { Skeleton } from '@/components/ui/skeleton'
-import ReviewList from '@/components/media-detail/review-list'
+import ReviewForm, { ReviewFormSkeleton } from '@/components/form/review-form'
+import ReviewList, { ReviewListSkeleton } from '@/components/media-detail/review-list'
 import { Separator } from '@/components/ui/separator'
 
 export default function MovieDetailPage() {
@@ -61,31 +60,28 @@ export default function MovieDetailPage() {
 
         <section>
           <div className="mt-10">
-            <Heading>Reviews</Heading>
+            <Heading className="mb-5">Reviews</Heading>
             {getMovieDetailQuery.isLoading ? (
-              <div className="mt-5 flex gap-2 sm:gap-4">
-                <Skeleton className="mt-1.5 size-12 rounded-full bg-foreground/15" />
-                <div className="grow lg:grid lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-8">
-                  <div>
-                    <Skeleton className="h-5 w-1/6 bg-foreground/15" />
-                    <Skeleton className="mt-3 h-28 w-full bg-foreground/15" />
-                    <Skeleton className="mt-3 h-10 w-28 bg-foreground/15" />
-                  </div>
-                </div>
-              </div>
+              <>
+                <ReviewFormSkeleton />
+                <Separator className="my-6" />
+                <ReviewListSkeleton />
+              </>
             ) : null}
             {movieDetail ? (
-              <>
-                <ReviewList mediaId={movieDetail.id} mediaType="movie" />
-                <Separator className="my-6 w-[calc(100%-252px)]" />
-                <ReviewForm
-                  mediaId={movieDetail.id}
-                  mediaPoster={movieDetail.posterPath}
-                  mediaReleaseDate={movieDetail.releaseDate}
-                  mediaTitle={movieDetail.title}
-                  mediaType="movie"
-                />
-              </>
+              <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-8">
+                <div>
+                  <ReviewForm
+                    mediaId={movieDetail.id}
+                    mediaPoster={movieDetail.posterPath}
+                    mediaReleaseDate={movieDetail.releaseDate}
+                    mediaTitle={movieDetail.title}
+                    mediaType="movie"
+                  />
+                  <Separator className="my-6" />
+                  <ReviewList mediaId={movieDetail.id} mediaType="movie" />
+                </div>
+              </div>
             ) : null}
           </div>
 

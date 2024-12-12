@@ -5,13 +5,14 @@ import { AutosizeTextarea } from '@/components/ui/autosize-textarea'
 import { addReviewBodySchema, AddReviewBodyType } from '@/lib/schemas/reviews.schema'
 import { LoaderCircleIcon, SendHorizonalIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { useAuthStore } from '@/lib/stores/auth-store'
 import { UserAvatar } from '@/components/auth-button'
 import { useAddReviewMutation } from '@/lib/tanstack-query/use-reviews'
 import { isAxiosEntityError } from '@/utils/error'
 import { EntityError } from '@/types/error'
 import { z } from 'zod'
 import { toast } from 'sonner'
+import { useGetProfileQuery } from '@/lib/tanstack-query/use-profile'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const contentSchema = addReviewBodySchema.pick({ content: true })
 type ContentType = z.TypeOf<typeof contentSchema>
@@ -19,7 +20,7 @@ type ContentType = z.TypeOf<typeof contentSchema>
 export default function ReviewForm(props: Omit<AddReviewBodyType, 'content'>) {
   const { mediaId, mediaPoster, mediaReleaseDate, mediaTitle, mediaType } = props
 
-  const profile = useAuthStore((state) => state.profile)
+  const profileQuery = useGetProfileQuery()
 
   const form = useForm<ContentType>({
     resolver: zodResolver(contentSchema),
@@ -57,10 +58,17 @@ export default function ReviewForm(props: Omit<AddReviewBodyType, 'content'>) {
     }
   }
 
-  return profile ? (
+  if (profileQuery.isLoading) return <ReviewFormSkeleton />
+
+  return profileQuery.isSuccess ? (
     <div className="flex gap-2 sm:gap-4">
-      <UserAvatar avatar={profile.avatar} name={profile.name} className="mt-1.5 size-12" variant="round" />
-      <div className="grow lg:grid lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-8">
+      <UserAvatar
+        avatar={profileQuery.data.data.avatar}
+        name={profileQuery.data.data.name}
+        className="mt-1.5 size-12"
+        variant="round"
+      />
+      <div className="grow">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
             <FormField
@@ -68,7 +76,7 @@ export default function ReviewForm(props: Omit<AddReviewBodyType, 'content'>) {
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <p className="line-clamp-1 text-xl font-semibold">{profile.name}</p>
+                  <p className="line-clamp-1 text-xl font-semibold">{profileQuery.data.data.name}</p>
                   <FormControl className="mt-3">
                     <AutosizeTextarea minHeight={100} maxHeight={200} {...field} />
                   </FormControl>
@@ -89,4 +97,19 @@ export default function ReviewForm(props: Omit<AddReviewBodyType, 'content'>) {
       </div>
     </div>
   ) : null
+}
+
+export function ReviewFormSkeleton() {
+  return (
+    <div className="flex gap-2 sm:gap-4">
+      <Skeleton className="mt-1.5 size-12 rounded-full bg-foreground/15" />
+      <div className="grow">
+        <div>
+          <Skeleton className="h-7 w-1/6 bg-foreground/15" />
+          <Skeleton className="mt-3 h-28 w-full bg-foreground/15" />
+          <Skeleton className="mt-3 h-10 w-28 bg-foreground/15" />
+        </div>
+      </div>
+    </div>
+  )
 }

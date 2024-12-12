@@ -8,7 +8,8 @@ import { useGetPersonCombinedCreditsQuery, useGetPersonDetailQuery } from '@/lib
 import { Heading } from '@/components/common'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { MediaCard } from '@/components/media-card'
+import { MediaCard, MediaCardSkeleton } from '@/components/media-card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function PersonDetailPage() {
   const { personId } = useParams<{ personId: string }>()
@@ -21,34 +22,54 @@ export default function PersonDetailPage() {
   return (
     <main>
       <div className="container sm:px-6 lg:px-8">
+        {getPersonDetailQuery.isLoading ? (
+          <div className="lg:grid lg:grid-cols-[220px_minmax(0,1fr)]">
+            <div className="w-56">
+              <AspectRatio ratio={4 / 5}>
+                <Skeleton className="size-full rounded-none bg-foreground/15" />
+              </AspectRatio>
+            </div>
+            <div className="mt-4 lg:mt-0 lg:px-8 lg:py-4">
+              <Skeleton className="h-8 w-1/2 bg-foreground/15" />
+              {Array.from({ length: 7 }).map((_, i) => (
+                <Skeleton key={i} className="mt-2 h-5 w-full bg-foreground/15 last:w-1/2" />
+              ))}
+            </div>
+          </div>
+        ) : null}
+
         {getPersonDetailQuery.isSuccess ? (
           <div className="lg:grid lg:grid-cols-[220px_minmax(0,1fr)]">
-            <div className="size-2/3 xs:size-1/2 md:size-1/3 lg:size-full">
-              <Avatar asChild className="size-full rounded-none">
-                <AspectRatio ratio={4 / 5}>
-                  {getPersonDetailQuery.data.data.profilePath ? (
-                    <LazyLoadImage
-                      src={getPersonDetailQuery.data.data.profilePath}
-                      alt={getPersonDetailQuery.data.data.name}
-                      onLoad={() => setIsImageLoaded(true)}
-                      className={cn('size-full object-cover transition', {
-                        'blur-md': !isImageLoaded,
-                      })}
-                    />
-                  ) : (
-                    <AvatarFallback className="rounded-none">{getPersonDetailQuery.data.data.name}</AvatarFallback>
-                  )}
-                </AspectRatio>
-              </Avatar>
-            </div>
-            <div className="lg:px-8 lg:py-4">
+            <Avatar asChild className="rounded-none">
+              {getPersonDetailQuery.data.data.profilePath ? (
+                <LazyLoadImage
+                  src={getPersonDetailQuery.data.data.profilePath}
+                  alt={getPersonDetailQuery.data.data.name}
+                  onLoad={() => setIsImageLoaded(true)}
+                  className={cn('size-2/5 object-cover transition md:size-1/3 lg:size-full', {
+                    'blur-md': !isImageLoaded,
+                  })}
+                />
+              ) : (
+                <AvatarFallback className="rounded-none">{getPersonDetailQuery.data.data.name}</AvatarFallback>
+              )}
+            </Avatar>
+
+            <div className="mt-4 lg:mt-0 lg:px-8 lg:py-4">
               <h1 className="text-lg font-bold text-foreground sm:text-2xl">{getPersonDetailQuery.data.data.name}</h1>
-              <p className="mt-4 text-foreground">{getPersonDetailQuery.data.data.biography}</p>
+              <p className="mt-2 text-foreground">{getPersonDetailQuery.data.data.biography}</p>
             </div>
           </div>
         ) : null}
         <div>
           <Heading className="mt-10">Medias</Heading>
+          {getPersonCombinedCreditsQuery.isLoading ? (
+            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4 lg:grid-cols-5 xl:grid-cols-6">
+              {Array.from({ length: 12 }).map((_, index) => (
+                <MediaCardSkeleton key={index} />
+              ))}
+            </div>
+          ) : null}
           {getPersonCombinedCreditsQuery.isSuccess ? (
             <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4 lg:grid-cols-5 xl:grid-cols-6">
               {getPersonCombinedCreditsQuery.data.data.cast.map((item) => (
