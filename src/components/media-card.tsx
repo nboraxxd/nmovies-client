@@ -10,23 +10,25 @@ import { MediaType } from '@/lib/schemas/common-media.schema'
 import { useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { cn } from '@/utils'
+import { HeartIcon } from 'lucide-react'
 
 interface Props {
-  id: number
+  id: number | string
   title: string
   mediaType: MediaType
   posterPath?: string
   releaseDate: string
   voteAverage: number
+  isFavorite?: boolean | null
 }
 
-function MediaCard({ id, mediaType, posterPath, releaseDate, title, voteAverage }: Props) {
+function MediaCard({ id, mediaType, posterPath, releaseDate, title, voteAverage, isFavorite }: Props) {
   const [isImageLoaded, setIsImageLoaded] = useState(false)
 
   const percent = Math.round(voteAverage * 10)
 
   return (
-    <Card>
+    <Card className="h-full">
       <Link to={`${mediaType === 'movie' ? PATH.MOVIES : PATH.TVS}/${id}`} className="flex h-full flex-col">
         <AspectRatio ratio={2 / 3}>
           <LazyLoadImage
@@ -37,9 +39,12 @@ function MediaCard({ id, mediaType, posterPath, releaseDate, title, voteAverage 
               'blur-md': !isImageLoaded,
             })}
           />
+          {isFavorite ? (
+            <HeartIcon className="absolute left-1 top-1 z-10 size-6 fill-primary/75 text-primary/0" />
+          ) : null}
           {mediaType === 'tv' ? (
             <div className="absolute right-1 top-1 rounded bg-background p-1 text-sm text-foreground shadow-md">
-              TV Series
+              TV Shows
             </div>
           ) : null}
           <CircularProgressBar percent={percent} className="absolute bottom-0 left-2 translate-y-1/2" />

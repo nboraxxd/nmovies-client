@@ -17,6 +17,7 @@ export const QUERY_KEY = {
   PERSON_COMBINED_CREDITS: 'personCombinedCredits',
 
   CHECK_FAVORITE_BY_MEDIA: 'checkFavoriteByMedia',
+  GET_MY_FAVORITES: 'getMyFavorites',
 
   REVIEWS_BY_MEDIA: 'reviewsByMedia',
 } as const

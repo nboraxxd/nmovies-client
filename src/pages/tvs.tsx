@@ -9,7 +9,7 @@ export default function TvsPage() {
   return (
     <main className="container mt-10 sm:px-6 lg:px-8">
       <h1 ref={headingRef} className="text-xl font-bold text-foreground md:text-2xl lg:text-3xl">
-        TV Series
+        TV Shows
       </h1>
       <GenresTvSelect />
       <div className="mt-3 flex justify-end gap-3">

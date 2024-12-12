@@ -5,7 +5,9 @@ import {
   AddFavoriteResponseType,
   CheckFavoriteByMediaResponseType,
   FavoriteByMediaParamsType,
+  GetMyFavoritesResponseType,
 } from '@/lib/schemas/favorite.schema'
+import { PageQueryType } from '@/lib/schemas/common-media.schema'
 
 const FAVORITES_PREFIX = '/favorites'
 
@@ -20,6 +22,10 @@ const favoritesApi = {
 
   deleteFavoriteByMedia: async ({ mediaId, mediaType }: FavoriteByMediaParamsType) => {
     return http.delete<MessageResponseType>(`${FAVORITES_PREFIX}/medias/${mediaId}/${mediaType}`)
+  },
+
+  getMyFavorites: async (query?: PageQueryType) => {
+    return http.get<GetMyFavoritesResponseType>(`${FAVORITES_PREFIX}/me`, { params: query })
   },
 }
 

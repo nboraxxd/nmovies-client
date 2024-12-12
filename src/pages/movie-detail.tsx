@@ -105,6 +105,7 @@ export default function MovieDetailPage() {
                     posterPath={item.posterPath ?? undefined}
                     releaseDate={item.mediaType === 'movie' ? item.releaseDate : item.firstAirDate}
                     voteAverage={item.voteAverage}
+                    isFavorite={item.isFavorite}
                   />
                 ))}
               </div>

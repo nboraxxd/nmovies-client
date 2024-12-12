@@ -20,7 +20,7 @@ export default function Header() {
             </li>
             <li>
               <Link to={PATH.TVS} className="px-2 py-1">
-                TV Series
+                TV Shows
               </Link>
             </li>
           </ul>

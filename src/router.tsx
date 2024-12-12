@@ -15,6 +15,7 @@ import RegisterPage from '@/pages/register'
 import TvDetailPage from '@/pages/tv-detail'
 import VerifyEmailPage from '@/pages/verify-email'
 import MovieDetailPage from '@/pages/movie-detail'
+import MyFavoritesPage from '@/pages/my-favorites'
 import PersonDetailPage from '@/pages/person-detail'
 import { ScrollTopProvider } from '@/components/provider'
 
@@ -75,6 +76,10 @@ export const router = createBrowserRouter([
               {
                 index: true,
                 element: <ProfilePage />,
+              },
+              {
+                path: PATH.MY_FAVORITES,
+                element: <MyFavoritesPage />,
               },
             ],
           },

@@ -74,6 +74,7 @@ function MediaList({
                 title={item.mediaType === 'movie' ? item.title : item.name}
                 voteAverage={item.voteAverage}
                 posterPath={item.posterPath ?? undefined}
+                isFavorite={item.isFavorite}
               />
             ))}
           </div>

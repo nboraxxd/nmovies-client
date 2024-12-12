@@ -49,6 +49,7 @@ export default function MediaTabs<T extends string>(props: Props<T>) {
                   posterPath={item.posterPath || placeholderPoster}
                   releaseDate={item.mediaType === 'movie' ? item.releaseDate : item.firstAirDate}
                   voteAverage={item.voteAverage}
+                  isFavorite={item.isFavorite}
                 />
               ))
           : null}
