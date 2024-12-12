@@ -67,7 +67,7 @@ function Banner(props: Props) {
           />
         </div>
         {/* Content */}
-        <div className="md:max-w-xl">
+        <div className="grow md:max-w-xl">
           <h1 className="line-clamp-1 text-xl font-bold text-foreground md:text-2xl lg:text-3xl">{title}</h1>
 
           <div className="mt-4 flex items-center gap-4">
@@ -126,7 +126,7 @@ function BannerSkeleton() {
     <div className="relative w-full bg-muted/30 pb-[100%] sm:pb-[72%] md:pb-[56%] lg:pb-[42%] xl:pb-[36%]">
       <div className="absolute inset-0 mx-auto flex w-full max-w-screen-xl items-center justify-center gap-8 p-6 md:items-stretch lg:p-8">
         <Skeleton className="hidden h-full md:block md:w-[344px] lg:w-72 xl:w-96" />
-        <div className="w-full md:max-w-xl">
+        <div className="grow md:max-w-xl">
           <Skeleton className="h-8 w-2/3" />
           {Array.from({ length: 5 }).map((_, index) => (
             <Skeleton key={index} className="mt-3 h-5 w-1/2" />

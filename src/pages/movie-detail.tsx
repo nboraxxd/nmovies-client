@@ -7,11 +7,11 @@ import {
 } from '@/lib/tanstack-query/use-movies'
 
 import { Heading } from '@/components/common'
+import { Separator } from '@/components/ui/separator'
 import { MediaCard, MediaCardSkeleton } from '@/components/media-card'
 import { Banner, BannerSkeleton, MediaInfo } from '@/components/media-detail'
 import ReviewForm, { ReviewFormSkeleton } from '@/components/form/review-form'
 import ReviewList, { ReviewListSkeleton } from '@/components/media-detail/review-list'
-import { Separator } from '@/components/ui/separator'
 
 export default function MovieDetailPage() {
   const { movieId } = useParams<{ movieId: string }>()
