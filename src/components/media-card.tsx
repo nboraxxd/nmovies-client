@@ -29,7 +29,8 @@ function MediaCard({ id, mediaType, posterPath, releaseDate, title, voteAverage,
 
   const percent = Math.round(voteAverage * 10)
 
-  const formattedReleaseDate = format(new Date(releaseDate), 'dd/MM/yyyy')
+  const _releaseDate = new Date(releaseDate)
+  const formattedReleaseDate = !isNaN(_releaseDate.getTime()) ? format(_releaseDate, 'dd/MM/yyyy') : ''
 
   return (
     <Card className="h-full">

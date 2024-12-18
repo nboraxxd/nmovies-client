@@ -1,11 +1,12 @@
+import omit from 'lodash/omit'
 import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import reviewsApi from '@/apis/reviews.api'
 import { QUERY_KEY } from '@/constants/tanstack-key'
-import { GetReviewsByMediaParamsType, GetReviewsByMediaResponseType } from '@/lib/schemas/reviews.schema'
-import { PageQueryType } from '@/lib/schemas/common-media.schema'
-import { useReviewStore } from '@/lib/stores/review-store'
 import { useAuthStore } from '@/lib/stores/auth-store'
+import { CursorPageQueryType, MediaType } from '@/lib/schemas/common-media.schema'
+import { GetReviewsByMediaParamsType, GetReviewsByMediaResponseType } from '@/lib/schemas/reviews.schema'
+import envVariables from '@/lib/schemas/env-variables.schema'
 
 export function useAddReviewMutation() {
   const queryClient = useQueryClient()
@@ -14,50 +15,21 @@ export function useAddReviewMutation() {
   return useMutation({
     mutationFn: reviewsApi.addReview,
     onSuccess: (response) => {
-      queryClient.setQueryData<InfiniteData<GetReviewsByMediaResponseType, number>>(
-        [QUERY_KEY.REVIEWS_BY_MEDIA, 'movie', 845781],
+      queryClient.setQueryData<InfiniteData<GetReviewsByMediaResponseType>>(
+        [QUERY_KEY.REVIEWS_BY_MEDIA, response.data.mediaType, response.data.mediaId],
         (oldData) => {
-          if (!oldData || !profile) return
+          if (!oldData || !profile) return oldData
+
+          const newReview = {
+            ...omit(response.data, ['userId']),
+            user: omit(profile, ['createdAt', 'updatedAt']),
+          }
 
           return {
             ...oldData,
-            pages: oldData.pages.map((page, index) => {
-              if (
-                index === page.pagination.currentPage - 1 &&
-                page.pagination.currentPage !== page.pagination.totalPages
-              ) {
-                page.data.pop()
-              }
-
-              if (index === 0) {
-                return {
-                  ...page,
-                  data: [
-                    {
-                      _id: response.data._id,
-                      content: response.data.content,
-                      updatedAt: response.data.updatedAt,
-                      user: {
-                        _id: profile._id,
-                        email: profile.email,
-                        avatar: profile.avatar,
-                        isVerified: profile.isVerified,
-                        name: profile.name,
-                      },
-                      createdAt: response.data.createdAt,
-                      mediaId: response.data.mediaId,
-                      mediaPoster: response.data.mediaPoster,
-                      mediaReleaseDate: response.data.mediaReleaseDate,
-                      mediaTitle: response.data.mediaTitle,
-                      mediaType: response.data.mediaType,
-                    },
-                    ...page.data,
-                  ],
-                }
-              }
-
-              return page
-            }),
+            pages: oldData.pages.map((reviewPage, index) =>
+              index === 0 ? { ...reviewPage, data: [newReview, ...reviewPage.data] } : reviewPage
+            ),
           }
         }
       )
@@ -65,21 +37,53 @@ export function useAddReviewMutation() {
   })
 }
 
-export function useGetReviewsByMediaQuery({ mediaId, mediaType }: GetReviewsByMediaParamsType) {
+export function useGetReviewsByMediaQuery({
+  mediaId,
+  mediaType,
+  cursor,
+}: GetReviewsByMediaParamsType & CursorPageQueryType) {
   return useInfiniteQuery({
-    queryFn: ({ pageParam }) => reviewsApi.getReviewsByMedia({ mediaId, mediaType }, { page: pageParam }),
+    queryFn: ({ pageParam }) => {
+      return reviewsApi.getReviewsByMedia({ mediaId, mediaType }, { cursor: pageParam })
+    },
     queryKey: [QUERY_KEY.REVIEWS_BY_MEDIA, mediaType, mediaId],
-    getNextPageParam: (lastPage) =>
-      lastPage.pagination.currentPage < lastPage.pagination.totalPages
-        ? lastPage.pagination.currentPage + 1
-        : undefined,
-    initialPageParam: 1,
-    // staleTime: 1000 * 60 * 5 /* 5 minutes */,
+    getNextPageParam: (lastPage) => (lastPage.hasNextPage ? lastPage.data.at(-1)?._id : undefined),
+    initialPageParam: cursor,
   })
 }
 
 export function useDeleteReviewMutation() {
+  const queryClient = useQueryClient()
+
   return useMutation({
-    mutationFn: reviewsApi.deleteReview,
+    mutationFn: ({ reviewId }: { reviewId: string; mediaType: MediaType; mediaId: number }) =>
+      reviewsApi.deleteReview(reviewId),
+    onSuccess: (_, { mediaType, mediaId, reviewId }) => {
+      queryClient.setQueryData<InfiniteData<GetReviewsByMediaResponseType>>(
+        [QUERY_KEY.REVIEWS_BY_MEDIA, mediaType, mediaId],
+        (oldData) => {
+          if (!oldData) return oldData
+
+          // Invalidate the query if has only one page, total items less than or equal to limit, and has next page
+          if (
+            oldData.pages.length === 1 &&
+            oldData.pages[0].data.length <= envVariables.VITE_REVIEWS_PER_PAGE_LIMIT &&
+            oldData.pages[0].hasNextPage
+          ) {
+            queryClient.invalidateQueries({
+              queryKey: [QUERY_KEY.REVIEWS_BY_MEDIA, mediaType, mediaId],
+            })
+          }
+
+          return {
+            ...oldData,
+            pages: oldData.pages.map((reviewPage) => ({
+              ...reviewPage,
+              data: reviewPage.data.filter((review) => review._id !== reviewId),
+            })),
+          }
+        }
+      )
+    },
   })
 }

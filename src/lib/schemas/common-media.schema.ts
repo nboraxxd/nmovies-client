@@ -60,6 +60,12 @@ export const pageQuerySchema = z
 
 export type PageQueryType = z.TypeOf<typeof pageQuerySchema>
 
+export const cursorPageQuerySchema = z.object({
+  cursor: z.string().optional(),
+})
+
+export type CursorPageQueryType = z.TypeOf<typeof cursorPageQuerySchema>
+
 export const searchQuerySchema = z
   .object({
     page: queryPageSchema,

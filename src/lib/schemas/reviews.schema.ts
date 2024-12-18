@@ -1,7 +1,6 @@
 import z from 'zod'
 
 import { userDocumentResponseSchema } from '@/lib/schemas/profile.schema'
-import { paginationResponseSchema } from '@/lib/schemas/common.schema'
 
 const reviewDocumentSchema = z.object({
   _id: z.string(),
@@ -56,7 +55,7 @@ export type GetReviewsByMediaParamsType = z.TypeOf<typeof getReviewsByMediaParam
 export const getReviewsByMediaResponseSchema = z.object({
   message: z.string(),
   data: z.array(reviewDataResponseSchema),
-  pagination: paginationResponseSchema,
+  hasNextPage: z.boolean(),
 })
 
 export type GetReviewsByMediaResponseType = z.TypeOf<typeof getReviewsByMediaResponseSchema>
@@ -64,7 +63,7 @@ export type GetReviewsByMediaResponseType = z.TypeOf<typeof getReviewsByMediaRes
 export const getMyReviewsResponseSchema = z.object({
   message: z.string(),
   data: z.array(reviewDocumentSchema.omit({ userId: true })),
-  pagination: paginationResponseSchema,
+  hasNextPage: z.boolean(),
 })
 
 export type GetMyReviewsResponseType = z.TypeOf<typeof getMyReviewsResponseSchema>

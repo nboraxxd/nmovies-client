@@ -1,6 +1,8 @@
-import { Fragment, useEffect } from 'react'
+import { toast } from 'sonner'
+import { Fragment } from 'react'
 import { format } from 'date-fns'
 import { LoaderCircleIcon } from 'lucide-react'
+import { TrashIcon } from '@radix-ui/react-icons'
 
 import { MediaType } from '@/lib/schemas/common-media.schema'
 import { ReviewDataResponseType } from '@/lib/schemas/reviews.schema'
@@ -9,20 +11,9 @@ import { useDeleteReviewMutation, useGetReviewsByMediaQuery } from '@/lib/tansta
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { UserAvatar } from '@/components/auth-button'
-import { TrashIcon } from '@radix-ui/react-icons'
-import { toast } from 'sonner'
 
 export default function ReviewList({ mediaId, mediaType }: { mediaId: number; mediaType: MediaType }) {
   const getReviewsByMediaQuery = useGetReviewsByMediaQuery({ mediaId, mediaType })
-
-  // const review = useReviewStore((state) => state.review)
-  // const setReview = useReviewStore((state) => state.setReview)
-
-  // useEffect(() => {
-  //   if (!getReviewsByMediaQuery.isFetching && review) {
-  //     setReview(null)
-  //   }
-  // }, [getReviewsByMediaQuery.isFetching, review, setReview])
 
   if (getReviewsByMediaQuery.isLoading) {
     return <ReviewListSkeleton />
@@ -30,9 +21,8 @@ export default function ReviewList({ mediaId, mediaType }: { mediaId: number; me
 
   return getReviewsByMediaQuery.isSuccess ? (
     <div className="flex flex-col">
-      {/* {review ? <ReviewItem key={review._id} review={review} /> : null} */}
-      {getReviewsByMediaQuery.data.pages.map((page) => (
-        <Fragment key={page.pagination.currentPage}>
+      {getReviewsByMediaQuery.data.pages.map((page, index) => (
+        <Fragment key={index}>
           {page.data.map((review) => (
             <ReviewItem key={review._id} review={review} />
           ))}
@@ -55,7 +45,9 @@ export default function ReviewList({ mediaId, mediaType }: { mediaId: number; me
   ) : null
 }
 
-function ReviewItem({ review: { updatedAt, user, content, _id } }: { review: ReviewDataResponseType }) {
+function ReviewItem({ review }: { review: ReviewDataResponseType }) {
+  const { updatedAt, user, content, _id, mediaId, mediaType } = review
+
   const deleteReviewMutation = useDeleteReviewMutation()
 
   const date = format(new Date(updatedAt), 'dd/MM/yyyy - hh:mm a')
@@ -63,7 +55,11 @@ function ReviewItem({ review: { updatedAt, user, content, _id } }: { review: Rev
   async function handleDeleteReview() {
     if (deleteReviewMutation.isPending) return
 
-    const response = await deleteReviewMutation.mutateAsync(_id)
+    const response = await deleteReviewMutation.mutateAsync({
+      reviewId: _id,
+      mediaType,
+      mediaId,
+    })
 
     toast.success(response.message)
   }
