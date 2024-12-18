@@ -1,18 +1,20 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
-import { AutosizeTextarea } from '@/components/ui/autosize-textarea'
-import { addReviewBodySchema, AddReviewBodyType } from '@/lib/schemas/reviews.schema'
-import { LoaderCircleIcon, SendHorizonalIcon } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { UserAvatar } from '@/components/auth-button'
-import { useAddReviewMutation } from '@/lib/tanstack-query/use-reviews'
-import { isAxiosEntityError } from '@/utils/error'
-import { EntityError } from '@/types/error'
 import { z } from 'zod'
 import { toast } from 'sonner'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { LoaderCircleIcon, SendHorizonalIcon } from 'lucide-react'
+
+import { EntityError } from '@/types/error'
+import { isAxiosEntityError } from '@/utils/error'
 import { useGetProfileQuery } from '@/lib/tanstack-query/use-profile'
+import { useAddReviewMutation } from '@/lib/tanstack-query/use-reviews'
+import { addReviewBodySchema, AddReviewBodyType } from '@/lib/schemas/reviews.schema'
+
+import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { AutosizeTextarea } from '@/components/ui/autosize-textarea'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
+import { UserAvatar } from '@/components/auth-button'
 
 const contentSchema = addReviewBodySchema.pick({ content: true })
 type ContentType = z.TypeOf<typeof contentSchema>
@@ -35,17 +37,19 @@ export default function ReviewForm(props: Omit<AddReviewBodyType, 'content'>) {
     if (addReviewMutation.isPending) return
 
     try {
-      const response = await addReviewMutation.mutateAsync({
-        content,
-        mediaId,
-        mediaPoster,
-        mediaReleaseDate,
-        mediaTitle,
-        mediaType,
-      })
+      if (profileQuery.isSuccess) {
+        const response = await addReviewMutation.mutateAsync({
+          content,
+          mediaId,
+          mediaPoster,
+          mediaReleaseDate,
+          mediaTitle,
+          mediaType,
+        })
 
-      toast.success(response.message)
-      form.reset()
+        toast.success(response.message)
+        form.reset()
+      }
     } catch (error) {
       if (isAxiosEntityError<EntityError>(error)) {
         const formErrors = error.response?.data
@@ -65,7 +69,7 @@ export default function ReviewForm(props: Omit<AddReviewBodyType, 'content'>) {
       <UserAvatar
         avatar={profileQuery.data.data.avatar}
         name={profileQuery.data.data.name}
-        className="mt-1.5 size-12"
+        className="hidden size-12 md:flex"
         variant="round"
       />
       <div className="grow">

@@ -1,4 +1,5 @@
 import http from '@/utils/http'
+import { PageQueryType } from '@/lib/schemas/common-media.schema'
 import { MessageResponseType } from '@/lib/schemas/common.schema'
 import {
   AddFavoriteBodyType,
@@ -7,7 +8,6 @@ import {
   FavoriteByMediaParamsType,
   GetMyFavoritesResponseType,
 } from '@/lib/schemas/favorite.schema'
-import { PageQueryType } from '@/lib/schemas/common-media.schema'
 
 const FAVORITES_PREFIX = '/favorites'
 
@@ -26,6 +26,10 @@ const favoritesApi = {
 
   getMyFavorites: async (query?: PageQueryType) => {
     return http.get<GetMyFavoritesResponseType>(`${FAVORITES_PREFIX}/me`, { params: query })
+  },
+
+  deleteFavoriteById: async (favoriteId: string) => {
+    return http.delete<MessageResponseType>(`${FAVORITES_PREFIX}/${favoriteId}`)
   },
 }
 

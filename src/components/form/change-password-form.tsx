@@ -32,6 +32,7 @@ export default function UpdateProfileForm() {
       const response = await changePasswordMutation.mutateAsync(values)
 
       toast.success(response.message)
+      form.reset()
     } catch (error) {
       if (isAxiosEntityError<EntityError>(error)) {
         const formErrors = error.response?.data

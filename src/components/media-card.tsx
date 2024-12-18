@@ -1,16 +1,18 @@
+import { useState } from 'react'
+import { format } from 'date-fns'
 import { Link } from 'react-router-dom'
+import { HeartIcon } from 'lucide-react'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
+import { cn } from '@/utils'
 import { PATH } from '@/constants/path'
+import { MediaType } from '@/lib/schemas/common-media.schema'
+
 import { Skeleton } from '@/components/ui/skeleton'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 import { CircularProgressBar, MovieSkeletonIcon } from '@/components/icons'
 import placeholderPoster from '/placeholder-poster.svg'
-import { MediaType } from '@/lib/schemas/common-media.schema'
-import { useState } from 'react'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
-import { cn } from '@/utils'
-import { HeartIcon } from 'lucide-react'
 
 interface Props {
   id: number | string
@@ -26,6 +28,8 @@ function MediaCard({ id, mediaType, posterPath, releaseDate, title, voteAverage,
   const [isImageLoaded, setIsImageLoaded] = useState(false)
 
   const percent = Math.round(voteAverage * 10)
+
+  const formattedReleaseDate = format(new Date(releaseDate), 'dd/MM/yyyy')
 
   return (
     <Card className="h-full">
@@ -51,7 +55,7 @@ function MediaCard({ id, mediaType, posterPath, releaseDate, title, voteAverage,
         </AspectRatio>
         <CardContent className="flex grow flex-col p-4 pt-6">
           <CardTitle className="mb-2 line-clamp-2 leading-normal">{title}</CardTitle>
-          <CardDescription className="mt-auto text-white">{releaseDate}</CardDescription>
+          <CardDescription className="mt-auto text-white">{formattedReleaseDate}</CardDescription>
         </CardContent>
       </Link>
     </Card>

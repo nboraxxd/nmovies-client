@@ -11,7 +11,7 @@ const reviewDocumentSchema = z.object({
   mediaType: z.enum(['movie', 'tv']),
   mediaPoster: z.string().nullable(),
   mediaReleaseDate: z.string(),
-  content: z.string().min(1).max(1000),
+  content: z.string().min(1).max(2000),
   createdAt: z.string(),
   updatedAt: z.string(),
 })
@@ -31,7 +31,7 @@ export const addReviewBodySchema = z
     mediaType: z.enum(['movie', 'tv']),
     mediaPoster: z.string().nullable(),
     mediaReleaseDate: z.string(),
-    content: z.string().min(1).max(1000),
+    content: z.string().min(1).max(2000),
   })
   .strict({ message: 'Additional properties not allowed' })
 

@@ -5,6 +5,7 @@ import {
   useGetMovieDetailQuery,
   useGetRecommendedMoviesQuery,
 } from '@/lib/tanstack-query/use-movies'
+import { useAuthStore } from '@/lib/stores/auth-store'
 
 import { Heading } from '@/components/common'
 import { Separator } from '@/components/ui/separator'
@@ -15,6 +16,8 @@ import ReviewList, { ReviewListSkeleton } from '@/components/media-detail/review
 
 export default function MovieDetailPage() {
   const { movieId } = useParams<{ movieId: string }>()
+
+  const isAuth = useAuthStore((state) => state.isAuth)
 
   const getMovieDetailQuery = useGetMovieDetailQuery(Number(movieId))
   const movieDetail = getMovieDetailQuery.isSuccess ? getMovieDetailQuery.data.data : null
@@ -61,28 +64,32 @@ export default function MovieDetailPage() {
         <section>
           <div className="mt-10">
             <Heading className="mb-5">Reviews</Heading>
-            {getMovieDetailQuery.isLoading ? (
-              <>
-                <ReviewFormSkeleton />
-                <Separator className="my-6" />
-                <ReviewListSkeleton />
-              </>
-            ) : null}
-            {movieDetail ? (
-              <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-8">
-                <div>
-                  <ReviewForm
-                    mediaId={movieDetail.id}
-                    mediaPoster={movieDetail.posterPath}
-                    mediaReleaseDate={movieDetail.releaseDate}
-                    mediaTitle={movieDetail.title}
-                    mediaType="movie"
-                  />
+            <div className="w-full lg:max-w-[calc(100%-252px)]">
+              {isAuth && getMovieDetailQuery.isLoading ? (
+                <>
+                  <ReviewFormSkeleton />
                   <Separator className="my-6" />
+                </>
+              ) : null}
+              {getMovieDetailQuery.isLoading ? <ReviewListSkeleton /> : null}
+              {movieDetail ? (
+                <>
+                  {isAuth ? (
+                    <>
+                      <ReviewForm
+                        mediaId={movieDetail.id}
+                        mediaPoster={movieDetail.posterPath}
+                        mediaReleaseDate={movieDetail.releaseDate}
+                        mediaTitle={movieDetail.title}
+                        mediaType="movie"
+                      />
+                      <Separator className="my-6" />
+                    </>
+                  ) : null}
                   <ReviewList mediaId={movieDetail.id} mediaType="movie" />
-                </div>
-              </div>
-            ) : null}
+                </>
+              ) : null}
+            </div>
           </div>
 
           <div className="mt-10">

@@ -19,6 +19,19 @@ export default function PersonDetailPage() {
   const getPersonDetailQuery = useGetPersonDetailQuery(Number(personId))
   const getPersonCombinedCreditsQuery = useGetPersonCombinedCreditsQuery(Number(personId))
 
+  // Sử dụng hash map để loại bỏ các item trùng lặp
+  const castCreditsMap: Record<string, boolean> = {}
+  const castCombinedCredits = getPersonCombinedCreditsQuery.isSuccess
+    ? getPersonCombinedCreditsQuery.data.data.cast.filter((item) => {
+        const key = `${item.id}-${item.mediaType}`
+        if (!castCreditsMap[key]) {
+          castCreditsMap[key] = true
+          return true
+        }
+        return false
+      })
+    : undefined
+
   return (
     <main>
       <div className="container sm:px-6 lg:px-8">
@@ -70,11 +83,11 @@ export default function PersonDetailPage() {
               ))}
             </div>
           ) : null}
-          {getPersonCombinedCreditsQuery.isSuccess ? (
+          {getPersonCombinedCreditsQuery.isSuccess && castCombinedCredits ? (
             <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4 lg:grid-cols-5 xl:grid-cols-6">
-              {getPersonCombinedCreditsQuery.data.data.cast.map((item) => (
+              {castCombinedCredits.map((item) => (
                 <MediaCard
-                  key={item.id}
+                  key={`${item.id}-${item.mediaType}`}
                   mediaType={item.mediaType}
                   id={item.id}
                   releaseDate={item.mediaType === 'movie' ? item.releaseDate : item.firstAirDate}

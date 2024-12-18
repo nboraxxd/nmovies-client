@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { UseQueryResult } from '@tanstack/react-query'
 
 import { PATH } from '@/constants/path'
@@ -10,11 +10,10 @@ import { useGetDiscoverMoviesQuery } from '@/lib/tanstack-query/use-movies'
 import { DiscoverTvsQueryType, DiscoverTvsResponseType } from '@/lib/schemas/tv.schema'
 import { DiscoverMoviesQueryType, DiscoverMoviesResponseType } from '@/lib/schemas/movies.schema'
 
-import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { MediaCard, MediaCardSkeleton } from '@/components/media-card'
 import { PaginationWithLinks } from '@/components/ui/pagination-with-link'
-import notFoundMedia from '@/assets/images/not-found-media.png'
+import { NotFoundMedia, NotFoundMediaReset } from '@/components/medias'
+import { MediaCard, MediaCardSkeleton } from '@/components/media-card'
 
 function MovieList({ headingOffsetTop }: { headingOffsetTop: number }) {
   const filteredMediaParams = useFilteredMediaParams<DiscoverMoviesQueryType>()
@@ -41,6 +40,8 @@ function MediaList({
   currentPage: number
   discoverQuery: UseQueryResult<DiscoverMoviesResponseType | DiscoverTvsResponseType>
 }) {
+  const { pathname } = useLocation()
+
   const navigate = useNavigate()
   const limitTotalPages = useLimitTotalPages(discoverQuery.data?.pagination.totalPages)
 
@@ -79,16 +80,12 @@ function MediaList({
             ))}
           </div>
         ) : (
-          <div className="mt-10 flex flex-col items-center">
-            <img src={notFoundMedia} alt="Not found media" className="w-28" />
-            <div className="mt-3 text-center text-gray-500 md:text-xl">
-              <p>Oops. No movie found.</p>
-              <p className="mt-3">Try clearing the filter and searching again?</p>
-            </div>
-            <Button className="mt-6" onClick={() => navigate(PATH.MOVIES)}>
-              Clear filter
-            </Button>
-          </div>
+          <NotFoundMedia
+            heading={`Oops. No ${pathname === PATH.MOVIES ? 'movie' : 'tv show'} found.`}
+            desc="Try clearing the filter and searching again?"
+          >
+            <NotFoundMediaReset onClick={() => navigate(pathname === PATH.MOVIES ? PATH.MOVIES : PATH.TVS)} />
+          </NotFoundMedia>
         )
       ) : null}
       {limitTotalPages && limitTotalPages > 1 ? (

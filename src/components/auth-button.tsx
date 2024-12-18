@@ -30,6 +30,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { useState } from 'react'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 function AuthButton() {
   const isAuth = useAuthStore((state) => state.isAuth)
@@ -125,6 +127,8 @@ interface UserAvatarProps {
 }
 
 export function UserAvatar({ name, avatar, className, variant }: UserAvatarProps) {
+  const [isImageLoaded, setIsImageLoaded] = useState(false)
+
   const variantOptions = cva('', {
     variants: {
       variant: {
@@ -137,7 +141,14 @@ export function UserAvatar({ name, avatar, className, variant }: UserAvatarProps
   return (
     <Avatar className={cn(className, variantOptions({ variant }))}>
       {avatar ? (
-        <img src={avatar} alt={name} className="relative flex size-full shrink-0 object-cover" />
+        <LazyLoadImage
+          src={avatar}
+          alt={name}
+          onLoad={() => setIsImageLoaded(true)}
+          className={cn('relative flex size-full shrink-0 object-cover transition', {
+            'blur-md': !isImageLoaded,
+          })}
+        />
       ) : (
         <AvatarFallback className={cn(variantOptions({ variant }), 'text-lg font-semibold')}>
           {name.charAt(0).toLocaleUpperCase()}

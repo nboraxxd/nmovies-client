@@ -6,6 +6,7 @@ import {
   GetReviewsByMediaResponseType,
 } from '@/lib/schemas/reviews.schema'
 import { PageQueryType } from '@/lib/schemas/common-media.schema'
+import { MessageResponseType } from '@/lib/schemas/common.schema'
 
 const REVIEWS_PREFIX = '/reviews'
 
@@ -18,6 +19,10 @@ const reviewsApi = {
     return http.get<GetReviewsByMediaResponseType>(`${REVIEWS_PREFIX}/medias/${params.mediaId}/${params.mediaType}`, {
       params: query,
     })
+  },
+
+  deleteReview: async (reviewId: string) => {
+    return http.delete<MessageResponseType>(`${REVIEWS_PREFIX}/${reviewId}`)
   },
 }
 
