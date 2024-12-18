@@ -43,9 +43,7 @@ export function useGetReviewsByMediaQuery({
   cursor,
 }: GetReviewsByMediaParamsType & CursorPageQueryType) {
   return useInfiniteQuery({
-    queryFn: ({ pageParam }) => {
-      return reviewsApi.getReviewsByMedia({ mediaId, mediaType }, { cursor: pageParam })
-    },
+    queryFn: ({ pageParam }) => reviewsApi.getReviewsByMedia({ mediaId, mediaType }, { cursor: pageParam }),
     queryKey: [QUERY_KEY.REVIEWS_BY_MEDIA, mediaType, mediaId],
     getNextPageParam: (lastPage) => (lastPage.hasNextPage ? lastPage.data.at(-1)?._id : undefined),
     initialPageParam: cursor,
@@ -77,9 +75,9 @@ export function useDeleteReviewMutation() {
 
           return {
             ...oldData,
-            pages: oldData.pages.map((reviewPage) => ({
-              ...reviewPage,
-              data: reviewPage.data.filter((review) => review._id !== reviewId),
+            pages: oldData.pages.map((reviewsData) => ({
+              ...reviewsData,
+              data: reviewsData.data.filter((review) => review._id !== reviewId),
             })),
           }
         }

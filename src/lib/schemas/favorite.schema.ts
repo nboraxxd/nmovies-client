@@ -1,5 +1,4 @@
 import z from 'zod'
-import { paginationResponseSchema } from '@/lib/schemas/common.schema'
 
 const favoriteDocumentSchema = z.object({
   _id: z.string(),
@@ -36,7 +35,7 @@ export type AddFavoriteResponseType = z.TypeOf<typeof addFavoriteResponseSchema>
 export const getMyFavoritesResponseSchema = z.object({
   message: z.string(),
   data: z.array(favoriteDocumentSchema.omit({ userId: true })),
-  pagination: paginationResponseSchema,
+  hasNextPage: z.boolean(),
 })
 
 export type GetMyFavoritesResponseType = z.TypeOf<typeof getMyFavoritesResponseSchema>

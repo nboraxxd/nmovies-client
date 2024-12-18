@@ -1,8 +1,7 @@
 import { toast } from 'sonner'
 import { Fragment } from 'react'
 import { format } from 'date-fns'
-import { LoaderCircleIcon } from 'lucide-react'
-import { TrashIcon } from '@radix-ui/react-icons'
+import { LoaderCircleIcon, Trash2Icon } from 'lucide-react'
 
 import { MediaType } from '@/lib/schemas/common-media.schema'
 import { ReviewDataResponseType } from '@/lib/schemas/reviews.schema'
@@ -11,6 +10,7 @@ import { useDeleteReviewMutation, useGetReviewsByMediaQuery } from '@/lib/tansta
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { UserAvatar } from '@/components/auth-button'
+import { useAuthStore } from '@/lib/stores/auth-store'
 
 export default function ReviewList({ mediaId, mediaType }: { mediaId: number; mediaType: MediaType }) {
   const getReviewsByMediaQuery = useGetReviewsByMediaQuery({ mediaId, mediaType })
@@ -48,6 +48,8 @@ export default function ReviewList({ mediaId, mediaType }: { mediaId: number; me
 function ReviewItem({ review }: { review: ReviewDataResponseType }) {
   const { updatedAt, user, content, _id, mediaId, mediaType } = review
 
+  const profile = useAuthStore((state) => state.profile)
+
   const deleteReviewMutation = useDeleteReviewMutation()
 
   const date = format(new Date(updatedAt), 'dd/MM/yyyy - hh:mm a')
@@ -68,13 +70,21 @@ function ReviewItem({ review }: { review: ReviewDataResponseType }) {
     <div className="flex gap-2 overflow-x-auto rounded p-3 hover:bg-card-foreground/10 sm:gap-4">
       <UserAvatar avatar={user.avatar} name={user.name} className="hidden size-12 md:flex" variant="round" />
       <div className="grow">
-        <div className="flex">
+        <div className="flex items-center">
           <p className="line-clamp-1 font-semibold">{user.name}</p>
-          <Button size="sm" className="ml-auto" onClick={handleDeleteReview} disabled={deleteReviewMutation.isPending}>
-            <TrashIcon className="size-4" />
-          </Button>
+          {profile?._id === user._id ? (
+            <Button
+              size="sm"
+              className="ml-auto px-2"
+              variant="ghost"
+              onClick={handleDeleteReview}
+              disabled={deleteReviewMutation.isPending}
+            >
+              <Trash2Icon className="size-4" />
+            </Button>
+          ) : null}
         </div>
-        <p className="text-xs text-foreground/50">{date}</p>
+        <p className="mt-px text-xs text-foreground/50">{date}</p>
         <p className="mt-1.5">{content}</p>
       </div>
     </div>
