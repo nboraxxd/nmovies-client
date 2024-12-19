@@ -14,4 +14,5 @@ export const PATH = {
   VERIFY_EMAIL: '/verify-email',
   PROFILE,
   MY_FAVORITES: `${PROFILE}/favorites`,
+  MY_REVIEWS: `${PROFILE}/reviews`,
 }

@@ -1,20 +1,15 @@
-import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 
-import { cn } from '@/utils'
 import { useGetPersonCombinedCreditsQuery, useGetPersonDetailQuery } from '@/lib/tanstack-query/use-people'
 
-import { Heading } from '@/components/common'
+import { Skeleton } from '@/components/ui/skeleton'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Heading, LazyLoadImage } from '@/components/common'
 import { MediaCard, MediaCardSkeleton } from '@/components/media-card'
-import { Skeleton } from '@/components/ui/skeleton'
 
 export default function PersonDetailPage() {
   const { personId } = useParams<{ personId: string }>()
-
-  const [isImageLoaded, setIsImageLoaded] = useState(false)
 
   const getPersonDetailQuery = useGetPersonDetailQuery(Number(personId))
   const getPersonCombinedCreditsQuery = useGetPersonCombinedCreditsQuery(Number(personId))
@@ -58,10 +53,6 @@ export default function PersonDetailPage() {
                 <LazyLoadImage
                   src={getPersonDetailQuery.data.data.profilePath}
                   alt={getPersonDetailQuery.data.data.name}
-                  onLoad={() => setIsImageLoaded(true)}
-                  className={cn('size-2/5 object-cover transition md:size-1/3 lg:size-full', {
-                    'blur-md': !isImageLoaded,
-                  })}
                 />
               ) : (
                 <AvatarFallback className="rounded-none">{getPersonDetailQuery.data.data.name}</AvatarFallback>

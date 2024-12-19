@@ -13,6 +13,7 @@ import NotFound from '@/pages/not-found'
 import ProfilePage from '@/pages/profile'
 import RegisterPage from '@/pages/register'
 import TvDetailPage from '@/pages/tv-detail'
+import MyReviewsPage from '@/pages/my-reviews'
 import VerifyEmailPage from '@/pages/verify-email'
 import MovieDetailPage from '@/pages/movie-detail'
 import MyFavoritesPage from '@/pages/my-favorites'
@@ -80,6 +81,10 @@ export const router = createBrowserRouter([
               {
                 path: PATH.MY_FAVORITES,
                 element: <MyFavoritesPage />,
+              },
+              {
+                path: PATH.MY_REVIEWS,
+                element: <MyReviewsPage />,
               },
             ],
           },

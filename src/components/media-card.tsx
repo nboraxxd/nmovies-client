@@ -1,16 +1,14 @@
-import { useState } from 'react'
 import { format } from 'date-fns'
 import { Link } from 'react-router-dom'
 import { HeartIcon } from 'lucide-react'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 
-import { cn } from '@/utils'
 import { PATH } from '@/constants/path'
 import { MediaType } from '@/lib/schemas/common-media.schema'
 
 import { Skeleton } from '@/components/ui/skeleton'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
+import { LazyLoadImage } from '@/components/common'
 import { CircularProgressBar, MovieSkeletonIcon } from '@/components/icons'
 import placeholderPoster from '/placeholder-poster.svg'
 
@@ -25,8 +23,6 @@ interface Props {
 }
 
 function MediaCard({ id, mediaType, posterPath, releaseDate, title, voteAverage, isFavorite }: Props) {
-  const [isImageLoaded, setIsImageLoaded] = useState(false)
-
   const percent = Math.round(voteAverage * 10)
 
   const _releaseDate = new Date(releaseDate)
@@ -36,14 +32,7 @@ function MediaCard({ id, mediaType, posterPath, releaseDate, title, voteAverage,
     <Card className="h-full">
       <Link to={`${mediaType === 'movie' ? PATH.MOVIES : PATH.TVS}/${id}`} className="flex h-full flex-col">
         <AspectRatio ratio={2 / 3}>
-          <LazyLoadImage
-            src={posterPath || placeholderPoster}
-            alt={title}
-            onLoad={() => setIsImageLoaded(true)}
-            className={cn('size-full rounded-t-xl object-cover transition', {
-              'blur-md': !isImageLoaded,
-            })}
-          />
+          <LazyLoadImage src={posterPath || placeholderPoster} alt={title} className="rounded-t-xl" />
           {isFavorite ? (
             <HeartIcon className="absolute left-1 top-1 z-10 size-6 fill-primary/75 text-primary/0" />
           ) : null}

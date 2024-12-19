@@ -20,4 +20,5 @@ export const QUERY_KEY = {
   GET_MY_FAVORITES: 'getMyFavorites',
 
   REVIEWS_BY_MEDIA: 'reviewsByMedia',
+  GET_MY_REVIEWS: 'getMyReviews',
 } as const

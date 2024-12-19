@@ -65,7 +65,7 @@ export default function ReviewForm(props: Omit<AddReviewBodyType, 'content'>) {
   if (profileQuery.isLoading) return <ReviewFormSkeleton />
 
   return profileQuery.isSuccess ? (
-    <div className="flex gap-2 sm:gap-4">
+    <div className="flex gap-3">
       <UserAvatar
         avatar={profileQuery.data.data.avatar}
         name={profileQuery.data.data.name}
@@ -105,8 +105,8 @@ export default function ReviewForm(props: Omit<AddReviewBodyType, 'content'>) {
 
 export function ReviewFormSkeleton() {
   return (
-    <div className="flex gap-2 sm:gap-4">
-      <Skeleton className="mt-1.5 size-12 rounded-full bg-foreground/15" />
+    <div className="flex gap-3">
+      <Skeleton className="mt-1.5 hidden size-12 rounded-full bg-foreground/15 md:block" />
       <div className="grow">
         <div>
           <Skeleton className="h-7 w-1/6 bg-foreground/15" />

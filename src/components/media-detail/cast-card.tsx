@@ -1,10 +1,7 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
-
-import { cn } from '@/utils'
 
 import { Skeleton } from '@/components/ui/skeleton'
+import { LazyLoadImage } from '@/components/common'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
@@ -17,22 +14,13 @@ interface Props {
 }
 
 function CastCard({ character, id, name, avatarUrl }: Props) {
-  const [isImageLoaded, setIsImageLoaded] = useState(false)
-
   return (
     <Card key={id}>
       <Link to={`/people/${id}`}>
-        <Avatar asChild className="size-full rounded-none">
+        <Avatar asChild className="size-full rounded-none rounded-t-xl">
           <AspectRatio ratio={4 / 5}>
             {avatarUrl ? (
-              <LazyLoadImage
-                src={avatarUrl}
-                alt={name}
-                onLoad={() => setIsImageLoaded(true)}
-                className={cn('size-full rounded-t-xl object-cover transition', {
-                  'blur-md': !isImageLoaded,
-                })}
-              />
+              <LazyLoadImage src={avatarUrl} alt={name} className="rounded-t-xl" />
             ) : (
               <AvatarFallback className="rounded-none rounded-t-xl">{name}</AvatarFallback>
             )}

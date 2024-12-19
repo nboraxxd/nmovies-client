@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { UserAvatar } from '@/components/auth-button'
 import { useAuthStore } from '@/lib/stores/auth-store'
+import { QUERY_KEY } from '@/constants/tanstack-key'
 
 export default function ReviewList({ mediaId, mediaType }: { mediaId: number; mediaType: MediaType }) {
   const getReviewsByMediaQuery = useGetReviewsByMediaQuery({ mediaId, mediaType })
@@ -46,29 +47,28 @@ export default function ReviewList({ mediaId, mediaType }: { mediaId: number; me
 }
 
 function ReviewItem({ review }: { review: ReviewDataResponseType }) {
-  const { updatedAt, user, content, _id, mediaId, mediaType } = review
+  const { createdAt, user, content, _id, mediaId, mediaType } = review
 
   const profile = useAuthStore((state) => state.profile)
 
   const deleteReviewMutation = useDeleteReviewMutation()
 
-  const date = format(new Date(updatedAt), 'dd/MM/yyyy - hh:mm a')
+  const date = format(new Date(createdAt), 'dd/MM/yyyy - hh:mm a')
 
   async function handleDeleteReview() {
     if (deleteReviewMutation.isPending) return
 
     const response = await deleteReviewMutation.mutateAsync({
       reviewId: _id,
-      mediaType,
-      mediaId,
+      queryKey: [QUERY_KEY.REVIEWS_BY_MEDIA, mediaType, mediaId],
     })
 
     toast.success(response.message)
   }
 
   return (
-    <div className="flex gap-2 overflow-x-auto rounded p-3 hover:bg-card-foreground/10 sm:gap-4">
-      <UserAvatar avatar={user.avatar} name={user.name} className="hidden size-12 md:flex" variant="round" />
+    <div className="flex gap-3 overflow-x-auto rounded p-3 transition-colors hover:bg-card-foreground/10">
+      <UserAvatar avatar={user.avatar} name={user.name} className="mt-0.5 hidden size-12 md:flex" variant="round" />
       <div className="grow">
         <div className="flex items-center">
           <p className="line-clamp-1 font-semibold">{user.name}</p>
@@ -104,7 +104,7 @@ export function ReviewListSkeleton() {
 function ReviewItemSkeleton() {
   return (
     <div className="flex gap-2 rounded p-3 sm:gap-4">
-      <Skeleton className="size-12 rounded-full bg-foreground/15" />
+      <Skeleton className="hidden size-12 rounded-full bg-foreground/15 md:block" />
       <div className="grow">
         <Skeleton className="h-6 w-1/6 bg-foreground/15" />
         <Skeleton className="mt-1.5 h-5 w-1/2 bg-foreground/15" />

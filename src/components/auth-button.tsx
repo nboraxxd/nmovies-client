@@ -18,9 +18,6 @@ import { useLogout } from '@/lib/tanstack-query/use-auth'
 import { useGetProfileQuery } from '@/lib/tanstack-query/use-profile'
 import { getRefreshTokenFromLocalStorage } from '@/utils/local-storage'
 
-import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,8 +27,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useState } from 'react'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
+import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { LazyLoadImage } from '@/components/common'
 
 function AuthButton() {
   const isAuth = useAuthStore((state) => state.isAuth)
@@ -127,8 +126,6 @@ interface UserAvatarProps {
 }
 
 export function UserAvatar({ name, avatar, className, variant }: UserAvatarProps) {
-  const [isImageLoaded, setIsImageLoaded] = useState(false)
-
   const variantOptions = cva('', {
     variants: {
       variant: {
@@ -141,14 +138,7 @@ export function UserAvatar({ name, avatar, className, variant }: UserAvatarProps
   return (
     <Avatar className={cn(className, variantOptions({ variant }))}>
       {avatar ? (
-        <LazyLoadImage
-          src={avatar}
-          alt={name}
-          onLoad={() => setIsImageLoaded(true)}
-          className={cn('relative flex size-full shrink-0 object-cover transition', {
-            'blur-md': !isImageLoaded,
-          })}
-        />
+        <LazyLoadImage src={avatar} alt={name} className="relative flex shrink-0" />
       ) : (
         <AvatarFallback className={cn(variantOptions({ variant }), 'text-lg font-semibold')}>
           {name.charAt(0).toLocaleUpperCase()}

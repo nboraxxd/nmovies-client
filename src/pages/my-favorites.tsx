@@ -1,6 +1,5 @@
 import { toast } from 'sonner'
-import { useInView } from 'framer-motion'
-import { Fragment, useEffect, useRef } from 'react'
+import { Fragment } from 'react'
 import { LoaderCircleIcon, TrashIcon } from 'lucide-react'
 
 import { useDeleteFavoriteByIdMutation, useGetMyFavoritesQuery } from '@/lib/tanstack-query/use-favorites'
@@ -8,6 +7,7 @@ import { useDeleteFavoriteByIdMutation, useGetMyFavoritesQuery } from '@/lib/tan
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { NotFoundMedia } from '@/components/medias'
+import { LoadMoreIndicator } from '@/components/common'
 import { MediaCard, MediaCardSkeleton } from '@/components/media-card'
 
 export default function MyFavoritesPage() {
@@ -88,31 +88,5 @@ export default function MyFavoritesPage() {
         />
       ) : null}
     </>
-  )
-}
-
-function LoadMoreIndicator({
-  fetchNextPage,
-  hasNextPage,
-  isFetchingNextPage,
-}: {
-  fetchNextPage: () => void
-  hasNextPage: boolean
-  isFetchingNextPage: boolean
-}) {
-  const ref = useRef<HTMLDivElement | null>(null)
-
-  const isInView = useInView(ref, { margin: '400px' })
-  useEffect(() => {
-    console.log({ isInView, hasNextPage, ref: ref.current })
-    if (isInView && hasNextPage) {
-      fetchNextPage()
-    }
-  }, [fetchNextPage, hasNextPage, isInView])
-
-  return (
-    <div ref={ref} className="flex justify-center">
-      {isFetchingNextPage ? <LoaderCircleIcon className="mt-3 size-6 animate-spin" /> : null}
-    </div>
   )
 }

@@ -1,12 +1,17 @@
+import { useEffect, useState } from 'react'
 import omit from 'lodash/omit'
-import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { InfiniteData, QueryKey, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import reviewsApi from '@/apis/reviews.api'
 import { QUERY_KEY } from '@/constants/tanstack-key'
 import { useAuthStore } from '@/lib/stores/auth-store'
-import { CursorPageQueryType, MediaType } from '@/lib/schemas/common-media.schema'
-import { GetReviewsByMediaParamsType, GetReviewsByMediaResponseType } from '@/lib/schemas/reviews.schema'
 import envVariables from '@/lib/schemas/env-variables.schema'
+import { CursorPageQueryType } from '@/lib/schemas/common-media.schema'
+import {
+  GetMyReviewsResponseType,
+  GetReviewsByMediaParamsType,
+  GetReviewsByMediaResponseType,
+} from '@/lib/schemas/reviews.schema'
 
 export function useAddReviewMutation() {
   const queryClient = useQueryClient()
@@ -50,15 +55,38 @@ export function useGetReviewsByMediaQuery({
   })
 }
 
+export function useGetMyReviewsQuery(query?: CursorPageQueryType) {
+  const [isInitialRender, setIsInitialRender] = useState(true)
+
+  const queryClient = useQueryClient()
+
+  useEffect(() => {
+    if (isInitialRender) {
+      setIsInitialRender(false)
+      return
+    }
+
+    return () => {
+      queryClient.removeQueries({ queryKey: [QUERY_KEY.GET_MY_REVIEWS] })
+    }
+  }, [isInitialRender, queryClient])
+
+  return useInfiniteQuery({
+    queryFn: ({ pageParam }) => reviewsApi.getMyReviews({ cursor: pageParam }),
+    queryKey: [QUERY_KEY.GET_MY_REVIEWS],
+    getNextPageParam: (lastPage) => (lastPage.hasNextPage ? lastPage.data.at(-1)?._id : undefined),
+    initialPageParam: query?.cursor,
+  })
+}
+
 export function useDeleteReviewMutation() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ reviewId }: { reviewId: string; mediaType: MediaType; mediaId: number }) =>
-      reviewsApi.deleteReview(reviewId),
-    onSuccess: (_, { mediaType, mediaId, reviewId }) => {
-      queryClient.setQueryData<InfiniteData<GetReviewsByMediaResponseType>>(
-        [QUERY_KEY.REVIEWS_BY_MEDIA, mediaType, mediaId],
+    mutationFn: ({ reviewId }: { reviewId: string; queryKey: QueryKey }) => reviewsApi.deleteReview(reviewId),
+    onSuccess: (_, { reviewId, queryKey }) => {
+      queryClient.setQueryData<InfiniteData<GetReviewsByMediaResponseType | GetMyReviewsResponseType>>(
+        queryKey,
         (oldData) => {
           if (!oldData) return oldData
 
@@ -69,7 +97,7 @@ export function useDeleteReviewMutation() {
             oldData.pages[0].hasNextPage
           ) {
             queryClient.invalidateQueries({
-              queryKey: [QUERY_KEY.REVIEWS_BY_MEDIA, mediaType, mediaId],
+              queryKey,
             })
           }
 
