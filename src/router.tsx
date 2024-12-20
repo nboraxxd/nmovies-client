@@ -9,6 +9,7 @@ import TvsPage from '@/pages/tvs'
 import Homepage from '@/pages/home'
 import LoginPage from '@/pages/login'
 import MoviesPage from '@/pages/movies'
+import SearchPage from '@/pages/search'
 import NotFound from '@/pages/not-found'
 import ProfilePage from '@/pages/profile'
 import RegisterPage from '@/pages/register'
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
       {
         path: PATH.TVS,
         element: <TvsPage />,
+      },
+      {
+        path: PATH.SEARCH,
+        element: <SearchPage />,
       },
       {
         path: PATH.MOVIE_DETAIL,

@@ -13,6 +13,7 @@ import { MediaCard, MediaCardSkeleton } from '@/components/media-card'
 import { Banner, BannerSkeleton, MediaInfo } from '@/components/media-detail'
 import ReviewForm, { ReviewFormSkeleton } from '@/components/form/review-form'
 import ReviewList, { ReviewListSkeleton } from '@/components/media-detail/review-list'
+import { NotFoundMedia } from '@/components/medias'
 
 export default function MovieDetailPage() {
   const { movieId } = useParams<{ movieId: string }>()
@@ -118,7 +119,7 @@ export default function MovieDetailPage() {
               </div>
             ) : null}
             {getRecommendedMoviesQuery.isSuccess && recommendedMovies.length === 0 ? (
-              <p className="mt-8">Don't have any recommended movies or tv shows</p>
+              <NotFoundMedia heading="No recommended movies" desc="There are no recommended movies or tv shows" />
             ) : null}
           </div>
         </section>

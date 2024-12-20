@@ -15,4 +15,5 @@ export const PATH = {
   PROFILE,
   MY_FAVORITES: `${PROFILE}/favorites`,
   MY_REVIEWS: `${PROFILE}/reviews`,
+  SEARCH: '/search',
 }

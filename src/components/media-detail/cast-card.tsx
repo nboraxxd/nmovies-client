@@ -16,7 +16,7 @@ interface Props {
 function CastCard({ character, id, name, avatarUrl }: Props) {
   return (
     <Card key={id}>
-      <Link to={`/people/${id}`}>
+      <Link to={`/people/${id}`} className="flex h-full flex-col">
         <Avatar asChild className="size-full rounded-none rounded-t-xl">
           <AspectRatio ratio={4 / 5}>
             {avatarUrl ? (
@@ -26,9 +26,9 @@ function CastCard({ character, id, name, avatarUrl }: Props) {
             )}
           </AspectRatio>
         </Avatar>
-        <CardContent className="p-4">
-          <CardTitle className="leading-snug">{name}</CardTitle>
-          <CardDescription className="mt-2 line-clamp-3 text-white">{character}</CardDescription>
+        <CardContent className="flex grow flex-col p-4">
+          <CardTitle className="mb-1.5 leading-snug">{name}</CardTitle>
+          <CardDescription className="mt-auto line-clamp-3 text-white">{character}</CardDescription>
         </CardContent>
       </Link>
     </Card>

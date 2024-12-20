@@ -12,6 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { UserAvatar } from '@/components/auth-button'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { QUERY_KEY } from '@/constants/tanstack-key'
+import { NotFoundMedia } from '@/components/medias'
 
 export default function ReviewList({ mediaId, mediaType }: { mediaId: number; mediaType: MediaType }) {
   const getReviewsByMediaQuery = useGetReviewsByMediaQuery({ mediaId, mediaType })
@@ -20,7 +21,17 @@ export default function ReviewList({ mediaId, mediaType }: { mediaId: number; me
     return <ReviewListSkeleton />
   }
 
-  return getReviewsByMediaQuery.isSuccess ? (
+  if (
+    getReviewsByMediaQuery.isSuccess &&
+    getReviewsByMediaQuery.data.pages.length === 1 &&
+    getReviewsByMediaQuery.data.pages[0].data.length === 0
+  ) {
+    return <NotFoundMedia heading="Oops! No reviews found" desc="Be the first to review this media" />
+  }
+
+  return getReviewsByMediaQuery.isSuccess &&
+    getReviewsByMediaQuery.data.pages.length >= 1 &&
+    getReviewsByMediaQuery.data.pages[0].data.length > 0 ? (
     <div className="flex flex-col">
       {getReviewsByMediaQuery.data.pages.map((page, index) => (
         <Fragment key={index}>

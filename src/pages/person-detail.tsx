@@ -53,6 +53,7 @@ export default function PersonDetailPage() {
                 <LazyLoadImage
                   src={getPersonDetailQuery.data.data.profilePath}
                   alt={getPersonDetailQuery.data.data.name}
+                  className="size-2/5 md:size-1/3 lg:size-full"
                 />
               ) : (
                 <AvatarFallback className="rounded-none">{getPersonDetailQuery.data.data.name}</AvatarFallback>

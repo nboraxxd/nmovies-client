@@ -125,7 +125,7 @@ interface UserAvatarProps {
   variant?: 'square' | 'round'
 }
 
-export function UserAvatar({ name, avatar, className, variant }: UserAvatarProps) {
+function UserAvatar({ name, avatar, className, variant }: UserAvatarProps) {
   const variantOptions = cva('', {
     variants: {
       variant: {
@@ -148,4 +148,4 @@ export function UserAvatar({ name, avatar, className, variant }: UserAvatarProps
   )
 }
 
-export { AuthButton, UserButton }
+export { AuthButton, UserButton, UserAvatar }

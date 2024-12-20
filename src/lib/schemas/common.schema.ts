@@ -8,14 +8,6 @@ export const passwordSchema = z
   .string({ required_error: 'Password is required' })
   .min(6, { message: 'Password must be at least 6 characters' })
 
-export const paginationResponseSchema = z.object({
-  currentPage: z.number(),
-  totalPages: z.number(),
-  count: z.number(),
-})
-
-export type PaginationResponseType = z.TypeOf<typeof paginationResponseSchema>
-
 export const queryPageSchema = z.coerce
   .number({ message: 'Page must be a number' })
   .int({ message: 'Page must be an integer' })
@@ -25,10 +17,18 @@ export const queryPageSchema = z.coerce
 
 export type QueryPageType = z.TypeOf<typeof queryPageSchema>
 
+export const paginationResponseSchema = z.object({
+  currentPage: z.number(),
+  totalPages: z.number(),
+  count: z.number(),
+})
+
+export type PaginationResponseType = z.TypeOf<typeof paginationResponseSchema>
+
 export const messageResponseSchema = z.object({
   message: z.string(),
 })
 
 export type MessageResponseType = z.TypeOf<typeof messageResponseSchema>
 
-export const clientUrlShema = z.string().url({ message: 'clientUrl must be a valid URL' })
+export const clientUrlSchema = z.string().url({ message: 'clientUrl must be a valid URL' })

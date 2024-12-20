@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
+import { SearchIcon } from 'lucide-react'
 
 import { PATH } from '@/constants/path'
+
+import { Button } from '@/components/ui/button'
 import { AuthButton } from '@/components/auth-button'
 
 export default function Header() {
@@ -11,17 +14,24 @@ export default function Header() {
           <img src="/logo.svg" alt="nmovies logo" className="size-8" />
           <span className="hidden sm:inline-block">nmovies</span>
         </Link>
-        <nav className="ml-3 sm:ml-10">
+        <nav className="mx-3 flex-1 sm:mx-10">
           <ul className="flex items-center gap-3 sm:gap-4 lg:gap-6">
             <li>
-              <Link to={PATH.MOVIES} className="px-2 py-1">
+              <Link to={PATH.MOVIES} className="p-1 text-sm sm:px-2 sm:text-base">
                 Movies
               </Link>
             </li>
             <li>
-              <Link to={PATH.TVS} className="px-2 py-1">
+              <Link to={PATH.TVS} className="p-1 text-sm sm:px-2 sm:text-base">
                 TV Shows
               </Link>
+            </li>
+            <li className="ml-auto">
+              <Button variant="ghost" size="icon" className="size-8 hover:bg-accent/30 sm:size-9" asChild>
+                <Link to={PATH.SEARCH}>
+                  <SearchIcon className="size-6" />
+                </Link>
+              </Button>
             </li>
           </ul>
         </nav>

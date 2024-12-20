@@ -12,9 +12,12 @@ import { MediaCard, MediaCardSkeleton } from '@/components/media-card'
 import { Banner, BannerSkeleton, MediaInfo } from '@/components/media-detail'
 import ReviewForm, { ReviewFormSkeleton } from '@/components/form/review-form'
 import ReviewList, { ReviewListSkeleton } from '@/components/media-detail/review-list'
+import { useAuthStore } from '@/lib/stores/auth-store'
 
 export default function TvDetailPage() {
   const { tvId } = useParams<{ tvId: string }>()
+
+  const isAuth = useAuthStore((state) => state.isAuth)
 
   const getTvDetailQuery = useGetTvDetailQuery(Number(tvId))
   const tvDetail = getTvDetailQuery.isSuccess ? getTvDetailQuery.data.data : null
@@ -70,28 +73,32 @@ export default function TvDetailPage() {
         <section>
           <div className="mt-10">
             <Heading className="mb-5">Reviews</Heading>
-            {getTvDetailQuery.isLoading ? (
-              <>
-                <ReviewFormSkeleton />
-                <Separator className="my-6" />
-                <ReviewListSkeleton />
-              </>
-            ) : null}
-            {tvDetail ? (
-              <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-8">
-                <div>
-                  <ReviewForm
-                    mediaId={tvDetail.id}
-                    mediaPoster={tvDetail.posterPath}
-                    mediaReleaseDate={tvDetail.firstAirDate}
-                    mediaTitle={tvDetail.name}
-                    mediaType="tv"
-                  />
+            <div className="w-full lg:max-w-[calc(100%-252px)]">
+              {isAuth && getTvDetailQuery.isLoading ? (
+                <>
+                  <ReviewFormSkeleton />
                   <Separator className="my-6" />
+                </>
+              ) : null}
+              {getTvDetailQuery.isLoading ? <ReviewListSkeleton /> : null}
+              {tvDetail ? (
+                <>
+                  {isAuth ? (
+                    <>
+                      <ReviewForm
+                        mediaId={tvDetail.id}
+                        mediaPoster={tvDetail.posterPath}
+                        mediaReleaseDate={tvDetail.firstAirDate}
+                        mediaTitle={tvDetail.name}
+                        mediaType="movie"
+                      />
+                      <Separator className="my-6" />
+                    </>
+                  ) : null}
                   <ReviewList mediaId={tvDetail.id} mediaType="tv" />
-                </div>
-              </div>
-            ) : null}
+                </>
+              ) : null}
+            </div>
           </div>
 
           <div className="mt-10">
@@ -104,22 +111,20 @@ export default function TvDetailPage() {
               </div>
             ) : null}
             {recommendedTvs.length > 0 ? (
-              <>
-                <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4 lg:grid-cols-5 xl:grid-cols-6">
-                  {recommendedTvs.map((item) => (
-                    <MediaCard
-                      key={item.id}
-                      id={item.id}
-                      title={item.mediaType === 'movie' ? item.title : item.name}
-                      mediaType={item.mediaType}
-                      posterPath={item.posterPath ?? undefined}
-                      releaseDate={item.mediaType === 'movie' ? item.releaseDate : item.firstAirDate}
-                      voteAverage={item.voteAverage}
-                      isFavorite={item.isFavorite}
-                    />
-                  ))}
-                </div>
-              </>
+              <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4 lg:grid-cols-5 xl:grid-cols-6">
+                {recommendedTvs.map((item) => (
+                  <MediaCard
+                    key={item.id}
+                    id={item.id}
+                    title={item.mediaType === 'movie' ? item.title : item.name}
+                    mediaType={item.mediaType}
+                    posterPath={item.posterPath ?? undefined}
+                    releaseDate={item.mediaType === 'movie' ? item.releaseDate : item.firstAirDate}
+                    voteAverage={item.voteAverage}
+                    isFavorite={item.isFavorite}
+                  />
+                ))}
+              </div>
             ) : null}
             {getRecommendedTvsQuery.isSuccess && recommendedTvs.length === 0 ? (
               <p className="mt-4 text-xl">Don't have any recommended movies or tv shows</p>

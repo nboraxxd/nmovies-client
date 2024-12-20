@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { clientUrlShema, emailSchema, nameSchema, passwordSchema } from '@/lib/schemas/common.schema'
+import { clientUrlSchema, emailSchema, nameSchema, passwordSchema } from '@/lib/schemas/common.schema'
 
 export const authResponseSchema = z.object({
   message: z.string(),
@@ -34,7 +34,7 @@ export const registerBodySchema = z
     confirmPassword: z
       .string({ required_error: 'confirmPassword is required' })
       .min(6, { message: 'confirmPassword must be at least 6 characters' }),
-    clientUrl: clientUrlShema,
+    clientUrl: clientUrlSchema,
   })
   .strict({ message: 'Additional properties not allowed' })
   .superRefine(({ confirmPassword, password }, ctx) => {
@@ -50,7 +50,7 @@ export const registerBodySchema = z
 export type RegisterBodyType = z.TypeOf<typeof registerBodySchema>
 
 export const resendEmailVerificationBodySchema = z
-  .object({ clientUrl: clientUrlShema })
+  .object({ clientUrl: clientUrlSchema })
   .strict({ message: 'Additional properties not allowed' })
 
 export type ResendEmailVerificationBodyType = z.TypeOf<typeof resendEmailVerificationBodySchema>
@@ -91,7 +91,7 @@ export type ChangePasswordBodyType = z.TypeOf<typeof changePasswordBodySchema>
 export const forgotPasswordBodySchema = z
   .object({
     email: emailSchema,
-    clientUrl: clientUrlShema,
+    clientUrl: clientUrlSchema,
   })
   .strict({ message: 'Additional properties not allowed' })
 

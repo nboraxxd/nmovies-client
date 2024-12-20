@@ -21,4 +21,8 @@ export const QUERY_KEY = {
 
   REVIEWS_BY_MEDIA: 'reviewsByMedia',
   GET_MY_REVIEWS: 'getMyReviews',
+
+  SEARCH: 'search',
+  TRENDING: 'trending',
+  TOP_RATED: 'topRated',
 } as const

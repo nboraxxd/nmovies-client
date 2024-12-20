@@ -203,3 +203,20 @@ export const TV_SORT_OPTIONS = [
 ] as const
 
 export const TV_SORT_LIST = TV_SORT_OPTIONS.map((option) => option.value)
+
+export const SEARCH_TABS = [
+  {
+    value: 'movie',
+    name: 'Movies',
+  },
+  {
+    value: 'tv',
+    name: 'TV Shows',
+  },
+  {
+    value: 'person',
+    name: 'People',
+  },
+] as const
+
+export const SEARCH_TAB_LIST = SEARCH_TABS.map((tab) => tab.value)
