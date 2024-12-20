@@ -24,7 +24,7 @@ export function useGetTopRatedQuery(type: MediaType, query?: PageQueryType) {
   })
 }
 
-export function useSearch(payload: { type: SearchType['type']; query: string; page?: number }) {
+export function useSearch(payload: { type: Exclude<SearchType['type'], undefined>; query: string; page?: number }) {
   const { page, query, type } = payload
 
   const [isInitialRender, setIsInitialRender] = useState(true)

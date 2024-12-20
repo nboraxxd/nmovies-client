@@ -24,7 +24,7 @@ export default function SearchResults() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useSearch({ query, type })
+  } = useSearch({ query, type: type || 'movie' })
 
   if (isLoading) {
     return (

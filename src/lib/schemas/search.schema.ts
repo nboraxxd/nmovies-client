@@ -7,7 +7,7 @@ import { z } from 'zod'
 export const searchSchema = z
   .object({
     query: z.string().optional(),
-    type: z.enum(['movie', 'tv', 'person']),
+    type: z.enum(['movie', 'tv', 'person']).optional(),
   })
   .strict({ message: 'Additional properties not allowed' })
 

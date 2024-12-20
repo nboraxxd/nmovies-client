@@ -15,13 +15,14 @@ export default function useSanitizeSearch() {
     {
       query: typeof queryParams.query === 'string' && queryParams.query.length > 0 ? queryParams.query : undefined,
       type:
-        typeof queryParams.type === 'string' && SEARCH_TAB_LIST.includes(queryParams.type as SearchType['type'])
+        typeof queryParams.type === 'string' &&
+        SEARCH_TAB_LIST.includes(queryParams.type as Exclude<SearchType['type'], undefined>)
           ? queryParams.type
-          : 'movie',
+          : undefined,
       page: Number(queryParams.page) ? Number(queryParams.page) : undefined,
     },
     isUndefined
-  ) as SearchQueryType & { type: SearchType['type'] }
+  ) as SearchQueryType & { type?: SearchType['type'] }
 
   return sanitizeSearch
 }

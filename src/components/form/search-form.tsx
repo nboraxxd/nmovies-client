@@ -23,7 +23,7 @@ export default function SearchForm() {
     resolver: zodResolver(searchSchema),
     defaultValues: {
       query: query ?? '',
-      type,
+      type: type ?? 'movie',
     },
   })
 
@@ -46,7 +46,7 @@ export default function SearchForm() {
 
   return (
     <Form {...form}>
-      <form className="w-full space-y-2" noValidate>
+      <form className="mx-auto w-full max-w-4xl space-y-2" noValidate>
         <FormField
           control={form.control}
           name="type"
