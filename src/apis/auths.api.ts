@@ -7,6 +7,7 @@ import {
   LoginBodyType,
   RefreshTokenType,
   RegisterBodyType,
+  ResetPasswordBodyType,
 } from '@/lib/schemas/auth.schema'
 import { MessageResponseType } from '@/lib/schemas/common.schema'
 import envVariables from '@/lib/schemas/env-variables.schema'
@@ -39,6 +40,8 @@ const authsApi = {
 
   forgotPassword: (body: ForgotPasswordBodyType) =>
     http.post<MessageResponseType>(`${AUTH_API_URL}/forgot-password`, body),
+
+  resetPassword: (body: ResetPasswordBodyType) => http.post<MessageResponseType>(RESET_PASSWORD_API_URL, body),
 }
 
 export default authsApi

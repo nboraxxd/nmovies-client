@@ -106,14 +106,14 @@ export const resetPasswordBodySchema = z
       .min(6, { message: 'confirmPassword must be at least 6 characters' }),
   })
   .strict({ message: 'Additional properties not allowed' })
-  .superRefine(({ password, confirmPassword }, ctx) => {
-    if (password !== confirmPassword) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Passwords do not match',
-        path: ['confirmPassword'],
-      })
-    }
-  })
+// .superRefine(({ password, confirmPassword }, ctx) => {
+//   if (password !== confirmPassword) {
+//     ctx.addIssue({
+//       code: z.ZodIssueCode.custom,
+//       message: 'Passwords do not match',
+//       path: ['confirmPassword'],
+//     })
+//   }
+// })
 
 export type ResetPasswordBodyType = z.TypeOf<typeof resetPasswordBodySchema>

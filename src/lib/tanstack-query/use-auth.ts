@@ -43,5 +43,9 @@ export function useLogout() {
 }
 
 export function useForgotPasswordMutation() {
-  return useMutation({ mutationFn: authsApi.forgotPassword, mutationKey: ['forgotPassword'] })
+  return useMutation({ mutationFn: authsApi.forgotPassword })
+}
+
+export function useResetPasswordMutation() {
+  return useMutation({ mutationFn: authsApi.resetPassword })
 }

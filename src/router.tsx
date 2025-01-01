@@ -19,6 +19,7 @@ import VerifyEmailPage from '@/pages/verify-email'
 import MovieDetailPage from '@/pages/movie-detail'
 import MyFavoritesPage from '@/pages/my-favorites'
 import PersonDetailPage from '@/pages/person-detail'
+import ResetPasswordPage from '@/pages/reset-password'
 import ForgotPasswordPage from '@/pages/forgot-password'
 import { ScrollTopProvider } from '@/components/provider'
 
@@ -74,6 +75,10 @@ export const router = createBrowserRouter([
           {
             path: PATH.FORGOT_PASSWORD,
             element: <ForgotPasswordPage />,
+          },
+          {
+            path: PATH.RESET_PASSWORD,
+            element: <ResetPasswordPage />,
           },
         ],
       },
