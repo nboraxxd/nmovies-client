@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { LoaderCircleIcon } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { PATH } from '@/constants/path'
 import { EntityError } from '@/types/error'
 import { isAxiosEntityError } from '@/utils/error'
 import { useLogin } from '@/lib/tanstack-query/use-auth'
@@ -65,7 +66,7 @@ export default function LoginForm() {
               <div className="flex justify-between">
                 <FormLabel>Password</FormLabel>
                 <Button variant="link" size="sm" className="h-auto p-0" asChild>
-                  <Link to="/">Forgot password?</Link>
+                  <Link to={PATH.FORGOT_PASSWORD}>Forgot password?</Link>
                 </Button>
               </div>
               <FormControl>

@@ -35,3 +35,11 @@ export function separateGenres(genres?: GenreType[]) {
 
   return { genresTop, genresBottom }
 }
+
+export function formatSecondsToMMSS(seconds: number): string {
+  const minutes = Math.floor(seconds / 60)
+  const remainingSecs = seconds % 60
+  const formattedMinutes = String(minutes).padStart(2, '0')
+  const formattedSeconds = String(remainingSecs).padStart(2, '0')
+  return `${formattedMinutes}:${formattedSeconds}`
+}

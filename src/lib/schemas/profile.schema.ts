@@ -40,7 +40,7 @@ export type UploadAvatarResponseType = z.TypeOf<typeof uploadAvatarResponseSchem
 
 export const updateProfileBodySchema = z
   .object({
-    name: nameSchema,
+    name: nameSchema.optional(),
     avatar: z.string().optional(),
   })
   .strict({ message: 'Additional properties not allowed' })

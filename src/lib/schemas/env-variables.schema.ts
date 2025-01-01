@@ -5,6 +5,7 @@ const envSchema = z.object({
   VITE_CLIENT_URL: z.string(),
   VITE_REVIEWS_PER_PAGE_LIMIT: z.coerce.number().int(),
   VITE_FAVORITES_PER_PAGE_LIMIT: z.coerce.number().int(),
+  VITE_RESEND_EMAIL_DEBOUNCE_TIME: z.coerce.number().int(),
 })
 
 const envProject = envSchema.safeParse({
@@ -12,6 +13,7 @@ const envProject = envSchema.safeParse({
   VITE_CLIENT_URL: import.meta.env.VITE_CLIENT_URL,
   VITE_REVIEWS_PER_PAGE_LIMIT: import.meta.env.VITE_REVIEWS_PER_PAGE_LIMIT,
   VITE_FAVORITES_PER_PAGE_LIMIT: import.meta.env.VITE_FAVORITES_PER_PAGE_LIMIT,
+  VITE_RESEND_EMAIL_DEBOUNCE_TIME: import.meta.env.VITE_RESEND_EMAIL_DEBOUNCE_TIME,
 })
 
 if (!envProject.success) {

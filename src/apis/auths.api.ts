@@ -3,6 +3,7 @@ import {
   AuthResponseType,
   ChangePasswordBodyType,
   EmailVerifyTokenType,
+  ForgotPasswordBodyType,
   LoginBodyType,
   RefreshTokenType,
   RegisterBodyType,
@@ -35,6 +36,9 @@ const authsApi = {
     http.patch<MessageResponseType>(`${AUTH_API_URL}/change-password`, body),
 
   logout: (body: RefreshTokenType) => http.post<MessageResponseType>(LOGOUT_API_URL, body),
+
+  forgotPassword: (body: ForgotPasswordBodyType) =>
+    http.post<MessageResponseType>(`${AUTH_API_URL}/forgot-password`, body),
 }
 
 export default authsApi

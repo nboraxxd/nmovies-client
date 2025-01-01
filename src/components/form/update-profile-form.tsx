@@ -6,8 +6,9 @@ import { LoaderCircleIcon, UploadIcon } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { EntityError } from '@/types/error'
-import { isAxiosEntityError } from '@/utils/error'
 import { AVATAR_SIZE_LIMIT } from '@/constants'
+import { isAxiosEntityError } from '@/utils/error'
+import { useAuthStore } from '@/lib/stores/auth-store'
 import { updateProfileBodySchema, UpdateProfileBodyType } from '@/lib/schemas/profile.schema'
 import { useUpdateProfileMutation, useUploadAvatarMutation } from '@/lib/tanstack-query/use-profile'
 
@@ -16,7 +17,6 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { useAuthStore } from '@/lib/stores/auth-store'
 
 export default function UpdateProfileForm() {
   const [file, setFile] = useState<File | null>(null)
@@ -88,17 +88,25 @@ export default function UpdateProfileForm() {
     }
 
     try {
+      let responseMessage
+
       if (file) {
         const form = new FormData()
         form.append('avatar', file)
 
         const uploadAvatarRes = await uploadAvatarMutation.mutateAsync(form)
         values.avatar = uploadAvatarRes.data.url
+
+        const updateProfileRes = await updateProfileMutation.mutateAsync(
+          values.name === profile.name ? { avatar: values.avatar } : values
+        )
+        responseMessage = updateProfileRes.message
+      } else {
+        const updateProfileRes = await updateProfileMutation.mutateAsync({ name: values.name })
+        responseMessage = updateProfileRes.message
       }
 
-      const updateProfileRes = await updateProfileMutation.mutateAsync(values)
-
-      toast.success(updateProfileRes.message)
+      toast.success(responseMessage)
       setFile(null)
     } catch (error) {
       if (isAxiosEntityError<EntityError>(error)) {
