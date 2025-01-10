@@ -90,7 +90,7 @@ export default function TvDetailPage() {
                         mediaPoster={tvDetail.posterPath}
                         mediaReleaseDate={tvDetail.firstAirDate}
                         mediaTitle={tvDetail.name}
-                        mediaType="movie"
+                        mediaType="tv"
                       />
                       <Separator className="my-6" />
                     </>
