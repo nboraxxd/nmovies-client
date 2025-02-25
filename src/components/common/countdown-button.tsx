@@ -1,8 +1,6 @@
 import { LoaderCircleIcon } from 'lucide-react'
-import { ComponentProps, ReactNode, useEffect, useState, useRef, useLayoutEffect } from 'react'
-
+import { ComponentProps, ReactNode, useEffect, useState, useRef, useCallback } from 'react'
 import { cn, formatSecondsToMMSS } from '@/utils'
-
 import { Button } from '@/components/ui/button'
 
 interface Props extends ComponentProps<'button'> {
@@ -19,18 +17,31 @@ export default function CountdownButton(props: Props) {
   const [isWaiting, setIsWaiting] = useState(Boolean(enableCountdown))
   const [countdown, setCountdown] = useState(timer)
 
-  // Refs for tracking time and intervals
+  // Refs
   const endTimeRef = useRef<number | null>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
-  const isMountedRef = useRef(true)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const textNodeRef = useRef<Text | null>(null)
+  const childTextRef = useRef<string>('')
 
-  // Function to update countdown based on end time
-  const updateCountdownFromEndTime = () => {
+  // Update DOM directly to prevent flicker
+  const updateTextNodeDirectly = (seconds: number) => {
+    if (buttonRef.current && textNodeRef.current) {
+      textNodeRef.current.nodeValue = `${childTextRef.current} in ${formatSecondsToMMSS(seconds)}`
+    }
+  }
+
+  // Function to calculate and update countdown
+  const updateCountdown = useCallback(() => {
     if (!endTimeRef.current) return false
 
     const now = Date.now()
     const remaining = Math.max(0, Math.ceil((endTimeRef.current - now) / 1000))
 
+    // Update DOM directly first (no React re-render)
+    updateTextNodeDirectly(remaining)
+
+    // Then update React state (will be visible on next render)
     setCountdown(remaining)
 
     if (remaining <= 0) {
@@ -40,16 +51,15 @@ export default function CountdownButton(props: Props) {
     }
 
     return true
-  }
+  }, [])
 
-  // Initialize countdown when enableCountdown changes
+  // Initialize countdown
   useEffect(() => {
     if (enableCountdown) {
       setIsWaiting(true)
       setCountdown(timer)
       endTimeRef.current = Date.now() + timer * 1000
     } else {
-      // Handle explicit disabling of countdown
       if (timerRef.current) {
         clearInterval(timerRef.current)
         timerRef.current = null
@@ -59,22 +69,19 @@ export default function CountdownButton(props: Props) {
     }
   }, [timer, enableCountdown])
 
-  // Handle the countdown timer
+  // Handle countdowns
   useEffect(() => {
-    // Clear existing interval
     if (timerRef.current) {
       clearInterval(timerRef.current)
       timerRef.current = null
     }
 
-    // Start new interval if waiting
     if (isWaiting && endTimeRef.current) {
-      // Immediately update to correct time before starting interval
-      updateCountdownFromEndTime()
+      // Calculate immediately
+      updateCountdown()
 
       timerRef.current = setInterval(() => {
-        const shouldContinue = updateCountdownFromEndTime()
-
+        const shouldContinue = updateCountdown()
         if (!shouldContinue && timerRef.current) {
           clearInterval(timerRef.current)
           timerRef.current = null
@@ -88,20 +95,15 @@ export default function CountdownButton(props: Props) {
         timerRef.current = null
       }
     }
-  }, [isWaiting])
+  }, [isWaiting, updateCountdown])
 
-  // Handle visibility changes
+  // Handle visibility changes (app switching, screen off)
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
-        // Important: Update immediately when becoming visible
         if (isWaiting && endTimeRef.current) {
-          // We update immediately without waiting for re-render
-          requestAnimationFrame(() => {
-            if (isMountedRef.current) {
-              updateCountdownFromEndTime()
-            }
-          })
+          // This will update the DOM directly before any React renders
+          updateCountdown()
         }
       }
     }
@@ -111,27 +113,69 @@ export default function CountdownButton(props: Props) {
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
-  }, [isWaiting])
+  }, [isWaiting, updateCountdown])
 
-  // Set mounted status for cleanup
+  // Store child text for direct DOM manipulation
   useEffect(() => {
-    isMountedRef.current = true
-    return () => {
-      isMountedRef.current = false
+    if (typeof children === 'string') {
+      childTextRef.current = children
+    } else if (Array.isArray(children) && children.length > 0 && typeof children[0] === 'string') {
+      childTextRef.current = children[0]
+    } else {
+      childTextRef.current = ''
     }
-  }, [])
+  }, [children])
 
-  // Use layoutEffect to ensure countdown is correct before paint
-  useLayoutEffect(() => {
-    if (isWaiting && endTimeRef.current) {
-      updateCountdownFromEndTime()
+  // Reference the text node after render
+  useEffect(() => {
+    if (buttonRef.current && isWaiting) {
+      // Find the text node to manipulate directly
+      const findTextNode = (node: Node): Text | null => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          return node as Text
+        }
+
+        for (let i = 0; i < node.childNodes.length; i++) {
+          const found = findTextNode(node.childNodes[i])
+          if (found) return found
+        }
+
+        return null
+      }
+
+      textNodeRef.current = findTextNode(buttonRef.current)
+
+      // Initial direct update
+      if (endTimeRef.current) {
+        updateCountdown()
+      }
     }
-  }, [isWaiting])
+  }, [isWaiting, updateCountdown])
+
+  // Handle browser page show event (more reliable for mobile)
+  useEffect(() => {
+    const handlePageShow = () => {
+      if (isWaiting && endTimeRef.current) {
+        updateCountdown()
+      }
+    }
+
+    window.addEventListener('pageshow', handlePageShow)
+
+    return () => {
+      window.removeEventListener('pageshow', handlePageShow)
+    }
+  }, [isWaiting, updateCountdown])
 
   return (
-    <Button className={cn('gap-1.5', className)} disabled={disabled || isLoading || isWaiting} {...rest}>
+    <Button
+      ref={buttonRef}
+      className={cn('gap-1.5', className)}
+      disabled={disabled || isLoading || isWaiting}
+      {...rest}
+    >
       {isLoading ? <LoaderCircleIcon className="size-4 animate-spin" /> : null}
-      {children} {isWaiting ? `in ${formatSecondsToMMSS(countdown)}` : ''}
+      {isWaiting ? `${children} in ${formatSecondsToMMSS(countdown)}` : children}
     </Button>
   )
 }
